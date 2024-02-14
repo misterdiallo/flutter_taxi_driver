@@ -1,0 +1,56 @@
+name: taxi_driver_app
+description: The Taxi Drive App is a sophisticated mobile application, developed using the Flutter framework, that facilitates efficient and secure transportation services. Its user-friendly interface incorporates essential elements like map views, destination input, and ride history, ensuring a seamless experience for users across Android and iOS platforms. The app prioritizes security through a robust user authentication system, while the real-time tracking feature enhances transparency and safety. The integration of payment gateways supports various methods, offering users flexibility in transactions. With a minimalist design and responsive layout, the app provides a straightforward booking process, complete with transparent fare calculations. The companion driver app enhances the overall efficiency of the platform by enabling drivers to seamlessly receive and fulfill ride requests. In summary, the Flutter Driver Taxi App stands out as a comprehensive and reliable solution for modern transportation needs.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+environment:
+  sdk: '>=3.1.3 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  provider: ^6.1.1
+  font_awesome_flutter: ^10.7.0
+  bubble: ^1.2.1
+  flutter_map: ^6.1.0
+  geolocator: ^10.1.0
+  latlong2: ^0.9.0
+  get: ^4.6.6
+  lottie: ^2.7.0
+  http: ^1.1.0
+  syncfusion_flutter_maps: ^24.2.4
+  badges: ^3.1.2
+  sliding_up_panel: ^2.0.0+1
+  flutter_credit_card: ^4.0.1
+  uuid: ^4.3.3
+  slide_to_act: ^2.0.2
+  flutter_rating_bar: ^4.0.1
+  get_storage: ^2.1.1
+  is_first_run: ^1.0.0
+  oktoast: ^3.4.0
+  intl: ^0.19.0
+  jwt_decode: ^0.3.1
+  get_it: ^7.6.7
+  animated_notch_bottom_bar: ^1.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/images/cards/
+    - assets/lotties/
+    - assets/map/
+  #  - images/a_dot_ham.jpeg
+  fonts:
+    - family: SFUIDisplay
+      fonts:
+        - asset: assets/fonts/SF_UI_Display_Regular.otf
+          weight: 400
+        - asset: assets/fonts/SF_UI_Display_SemiBold.otf
+          weight: 700
+        - asset: assets/fonts/SF_UI_Display_Thin.otf
+          weight: 200
