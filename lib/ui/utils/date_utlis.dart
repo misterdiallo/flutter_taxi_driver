@@ -6,6 +6,22 @@ formatToDateTimeFromApi(String date) {
   return formated;
 }
 
+String formatDateUtilsNew(DateTime date) {
+  final now = DateTime.now();
+  String formattedDate;
+
+  // Check if the date's year is the current year
+  if (date.year == now.year) {
+    // Format without the year
+    formattedDate = DateFormat('dd MMM HH:mm').format(date);
+  } else {
+    // Include the year in the format
+    formattedDate = DateFormat('dd MMM,yyyy HH:mm').format(date);
+  }
+
+  return formattedDate;
+}
+
 formatToDateFromApi(String date) {
   DateTime parse = DateTime.parse(date);
   String formated = DateFormat('dd MMM yyyy').format(parse);

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:taxi_driver_app/admin/dashboard.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:taxi_driver_app/core/controllers/controllers.dart';
@@ -47,7 +48,11 @@ const String CustomerRoute = "/customer";
 const String DriverRoute = "/driver";
 const String DriverRideDetailsRoute = "/ride-details-driver";
 // ........
+
+// .... ADMIN...
 const String AdminRoute = "/admin";
+
+// ...........
 const String RegisterRoute = "/register";
 const String LoginRoute = "/login";
 const String PhoneRegisterRoute = "/phone-register";
@@ -74,6 +79,10 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case InitialRoute:
       return MaterialPageRoute(
           builder: (BuildContext context) => const Dispatcher());
+    //
+    case AdminRoute:
+      return MaterialPageRoute(builder: (BuildContext context) => DashBoard());
+
     //
     case DriverRoute:
       return MaterialPageRoute(
@@ -214,6 +223,10 @@ final getRoutes = [
   GetPage(
     name: DriverRoute,
     page: () => const HomePageDriver(),
+  ),
+  GetPage(
+    name: AdminRoute,
+    page: () => DashBoard(),
   ),
   GetPage(
     name: DriverRideDetailsRoute,

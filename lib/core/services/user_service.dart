@@ -11,11 +11,11 @@ List<UserModel> users = [
     userType: UserType.customer,
   ),
   UserModel(
-    userId: 'user000002',
-    fullName: 'User02',
-    email: 'user@email.com',
+    userId: 'Admin',
+    fullName: 'Admin',
+    email: 'admin@gmail.com',
     phoneNumber: '123456',
-    userType: UserType.customer,
+    userType: UserType.admin,
   ),
   UserModel(
     userId: "101",

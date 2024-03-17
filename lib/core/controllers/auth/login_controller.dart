@@ -64,6 +64,7 @@ class LoginController extends GetxController {
       authController.setUserType(result.userType);
       authController.setIsCustomer(result.userType == UserType.customer);
       authController.setIsDriver(result.userType == UserType.driver);
+      authController.setIsAdmin(result.userType == UserType.admin);
       authController.setFullName(result.fullName);
       authController.setPhoneNumber(result.phoneNumber);
       authController.setEmail(result.email);

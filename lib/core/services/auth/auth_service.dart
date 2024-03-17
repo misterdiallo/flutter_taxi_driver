@@ -23,7 +23,7 @@ class AuthService extends GetxService {
   // Simulated login method
   Future<UserModel?> login(String email, String password) async {
     // Simulate API call delay
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     // Check if credentials match any user in the list
     final user = users.firstWhereOrNull(

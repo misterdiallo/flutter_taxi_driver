@@ -15,6 +15,8 @@ class AuthController extends GetxController {
   void setToken(String val) => authStore.write("token", val);
   bool get isDriver => authStore.read("isDriver") ?? false;
   void setIsDriver(bool val) => authStore.write("isDriver", val);
+  bool get isAdmin => authStore.read("isAdmin") ?? false;
+  void setIsAdmin(bool val) => authStore.write("isAdmin", val);
   bool get isCustomer => authStore.read("isCustomer") ?? false;
   void setIsCustomer(bool val) => authStore.write("isCustomer", val);
 
@@ -38,6 +40,8 @@ class AuthController extends GetxController {
         return CustomerRoute;
       } else if (isDriver) {
         return DriverRoute;
+      } else if (isAdmin) {
+        return AdminRoute;
       } else {
         return null;
       }
@@ -59,7 +63,9 @@ class AuthController extends GetxController {
         phoneNumber: phoneNumber!,
         userType: UserType.customer.name == userType!
             ? UserType.customer
-            : UserType.driver,
+            : UserType.driver.name == userType!
+                ? UserType.driver
+                : UserType.admin,
       );
     }
     return null;
