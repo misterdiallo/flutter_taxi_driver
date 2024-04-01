@@ -19,24 +19,24 @@ class _DriverRideDetailsPageState extends State<DriverRideDetailsPage> {
   RideModel? currentRide;
 
   void updatedRideStatus() {
-    if (currentRide!.rideStatus == RideStatus.pending) {
-      print("before Update: ${currentRide!.rideStatus.name.toString()}");
+    if (currentRide!.ride_status == RideStatus.pending) {
+      print("before Update: ${currentRide!.ride_status.name.toString()}");
       setState(() {
         currentRide = currentRide!.updateRideStatus(RideStatus.accepted);
       });
-      print("after Update: ${currentRide!.rideStatus.name.toString()}");
-    } else if (currentRide!.rideStatus == RideStatus.accepted) {
-      print("before Update: ${currentRide!.rideStatus.name.toString()}");
+      print("after Update: ${currentRide!.ride_status.name.toString()}");
+    } else if (currentRide!.ride_status == RideStatus.accepted) {
+      print("before Update: ${currentRide!.ride_status.name.toString()}");
       setState(() {
         currentRide = currentRide!.updateRideStatus(RideStatus.ongoing);
       });
-      print("after Update: ${currentRide!.rideStatus.name.toString()}");
-    } else if (currentRide!.rideStatus == RideStatus.ongoing) {
-      print("before Update: ${currentRide!.rideStatus.name.toString()}");
+      print("after Update: ${currentRide!.ride_status.name.toString()}");
+    } else if (currentRide!.ride_status == RideStatus.ongoing) {
+      print("before Update: ${currentRide!.ride_status.name.toString()}");
       setState(() {
         currentRide = currentRide!.updateRideStatus(RideStatus.completed);
       });
-      print("after Update: ${currentRide!.rideStatus.name.toString()}");
+      print("after Update: ${currentRide!.ride_status.name.toString()}");
     }
   }
 
@@ -89,7 +89,7 @@ class Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (_) {
-      if (ride.rideStatus == RideStatus.pending) {
+      if (ride.ride_status == RideStatus.pending) {
         return SizedBox.expand(
           child: Stack(
             children: [
@@ -98,7 +98,7 @@ class Content extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      'Request Details (${ride.rideStatus.name.toUpperCase()})',
+                      'Request Details (${ride.ride_status.name.toUpperCase()})',
                       style: theme.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.w300,
                         fontSize: 25,
@@ -164,14 +164,14 @@ class Content extends StatelessWidget {
                                 minVerticalPadding: 0,
                                 dense: true,
                                 subtitle: Text(
-                                  ride.rideOriginPlace.address,
+                                  ride.ride_origin_place.address,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w300,
                                     fontSize: 12,
                                   ),
                                 ),
                                 title: Text(
-                                  ride.rideOriginPlace.name,
+                                  ride.ride_origin_place.name,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 14,
@@ -181,14 +181,14 @@ class Content extends StatelessWidget {
                               ListTile(
                                 dense: true,
                                 subtitle: Text(
-                                  ride.rideEndPlace.address,
+                                  ride.ride_end_place.address,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w300,
                                     fontSize: 12,
                                   ),
                                 ),
                                 title: Text(
-                                  ride.rideEndPlace.name,
+                                  ride.ride_end_place.name,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 14,
@@ -274,7 +274,7 @@ class Content extends StatelessWidget {
           ),
         );
       }
-      if (ride.rideStatus == RideStatus.accepted) {
+      if (ride.ride_status == RideStatus.accepted) {
         var user = ride.user;
         return SizedBox.expand(
           child: Stack(
@@ -285,7 +285,7 @@ class Content extends StatelessWidget {
                   children: [
                     Center(
                       child: Text(
-                        'Request Details  (${ride.rideStatus.name.toUpperCase()})',
+                        'Request Details  (${ride.ride_status.name.toUpperCase()})',
                         style: theme.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w300,
                           fontSize: 25,
@@ -351,14 +351,14 @@ class Content extends StatelessWidget {
                                   minVerticalPadding: 0,
                                   dense: true,
                                   subtitle: Text(
-                                    ride.rideOriginPlace.address,
+                                    ride.ride_origin_place.address,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w300,
                                       fontSize: 12,
                                     ),
                                   ),
                                   title: Text(
-                                    ride.rideOriginPlace.name,
+                                    ride.ride_origin_place.name,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14,
@@ -368,14 +368,14 @@ class Content extends StatelessWidget {
                                 ListTile(
                                   dense: true,
                                   subtitle: Text(
-                                    ride.rideEndPlace.address,
+                                    ride.ride_end_place.address,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w300,
                                       fontSize: 12,
                                     ),
                                   ),
                                   title: Text(
-                                    ride.rideEndPlace.name,
+                                    ride.ride_end_place.name,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14,
@@ -451,7 +451,7 @@ class Content extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  user.fullName,
+                                  user.full_name,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -468,7 +468,7 @@ class Content extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  user.phoneNumber,
+                                  user.phone_number,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -522,7 +522,7 @@ class Content extends StatelessWidget {
           ),
         );
       }
-      if (ride.rideStatus == RideStatus.ongoing) {
+      if (ride.ride_status == RideStatus.ongoing) {
         var user = ride.user;
         return SizedBox.expand(
           child: Stack(
@@ -599,14 +599,14 @@ class Content extends StatelessWidget {
                                   minVerticalPadding: 0,
                                   dense: true,
                                   subtitle: Text(
-                                    ride.rideOriginPlace.address,
+                                    ride.ride_origin_place.address,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w300,
                                       fontSize: 12,
                                     ),
                                   ),
                                   title: Text(
-                                    ride.rideOriginPlace.name,
+                                    ride.ride_origin_place.name,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14,
@@ -616,14 +616,14 @@ class Content extends StatelessWidget {
                                 ListTile(
                                   dense: true,
                                   subtitle: Text(
-                                    ride.rideEndPlace.address,
+                                    ride.ride_end_place.address,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w300,
                                       fontSize: 12,
                                     ),
                                   ),
                                   title: Text(
-                                    ride.rideEndPlace.name,
+                                    ride.ride_end_place.name,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14,
@@ -667,7 +667,7 @@ class Content extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  user.fullName,
+                                  user.full_name,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -684,7 +684,7 @@ class Content extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  user.phoneNumber,
+                                  user.phone_number,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -738,7 +738,7 @@ class Content extends StatelessWidget {
           ),
         );
       }
-      if (ride.rideStatus == RideStatus.completed) {
+      if (ride.ride_status == RideStatus.completed) {
         var user = ride.user;
         return SizedBox.expand(
           child: Stack(
@@ -815,14 +815,14 @@ class Content extends StatelessWidget {
                                   minVerticalPadding: 0,
                                   dense: true,
                                   subtitle: Text(
-                                    ride.rideOriginPlace.address,
+                                    ride.ride_origin_place.address,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w300,
                                       fontSize: 12,
                                     ),
                                   ),
                                   title: Text(
-                                    ride.rideOriginPlace.name,
+                                    ride.ride_origin_place.name,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14,
@@ -832,14 +832,14 @@ class Content extends StatelessWidget {
                                 ListTile(
                                   dense: true,
                                   subtitle: Text(
-                                    ride.rideEndPlace.address,
+                                    ride.ride_end_place.address,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w300,
                                       fontSize: 12,
                                     ),
                                   ),
                                   title: Text(
-                                    ride.rideEndPlace.name,
+                                    ride.ride_end_place.name,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14,
@@ -883,7 +883,7 @@ class Content extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  user.fullName,
+                                  user.full_name,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -900,7 +900,7 @@ class Content extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  user.phoneNumber,
+                                  user.phone_number,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w500,
                                   ),

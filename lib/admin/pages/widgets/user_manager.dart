@@ -24,9 +24,9 @@ class UserManager {
                       }
                     },
                     cells: <DataCell>[
-                      DataCell(Text(driver.fullName)),
+                      DataCell(Text(driver.full_name)),
                       DataCell(Text(driver.email)),
-                      DataCell(Text(driver.phoneNumber)),
+                      DataCell(Text(driver.phone_number)),
                     ],
                   ))
               .toList(),
@@ -38,7 +38,7 @@ class UserManager {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("${user.fullName}'s Details"),
+          title: Text("${user.full_name}'s Details"),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -50,7 +50,7 @@ class UserManager {
                 ListTile(
                   leading: const Icon(Icons.phone),
                   title: const Text("Phone Number"),
-                  subtitle: Text(user.phoneNumber),
+                  subtitle: Text(user.phone_number),
                 ),
                 // Additional details can be added here
               ],
@@ -98,7 +98,7 @@ class UserManager {
         return AlertDialog(
           title: const Text("Deactivate User"),
           content:
-              Text("Are you sure you want to deactivate ${user.fullName}?"),
+              Text("Are you sure you want to deactivate ${user.full_name}?"),
           actions: <Widget>[
             TextButton(
               child: const Text("Cancel"),
@@ -113,7 +113,7 @@ class UserManager {
                 // For demonstration, we'll just print to the console
                 Navigator.of(dialogContext).pop();
                 showCustomPopup(
-                    context, "${user.fullName} has been deactivated");
+                    context, "${user.full_name} has been deactivated");
               },
             ),
           ],

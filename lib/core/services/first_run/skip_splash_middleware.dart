@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taxi_driver_app/core/controllers/fisrt_run/first_run_controller.dart';
-import 'package:taxi_driver_app/core/services/auth/auth_service.dart';
+import 'package:taxi_driver_app/core/db/const.dart';
 import 'package:taxi_driver_app/core/services/first_run/first_run_check_service.dart';
 import 'package:taxi_driver_app/router.dart';
 

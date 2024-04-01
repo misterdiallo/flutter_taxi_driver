@@ -23,7 +23,7 @@ extension UserTypeExtension on UserType {
       case 'admin':
         return UserType.admin;
       default:
-        throw ArgumentError('Invalid UserType value: $value');
+        return UserType.customer;
     }
   }
 }

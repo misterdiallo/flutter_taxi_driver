@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:syncfusion_flutter_maps/maps.dart';
 import 'package:taxi_driver_app/core/api_map_config.dart';
 import 'package:taxi_driver_app/core/controllers/controllers.dart';
+import 'package:taxi_driver_app/core/models/car_model.dart';
 import 'package:taxi_driver_app/core/models/place_model.dart';
 import 'package:taxi_driver_app/core/models/ride_model.dart';
 import 'package:taxi_driver_app/core/models/route_api.dart';
@@ -21,6 +23,8 @@ import 'package:taxi_driver_app/ui/screens/CUSTOMER/ride_detail_page_customer.da
 import 'package:taxi_driver_app/ui/screens/CUSTOMER/ride_payement_page_customer.dart';
 import 'package:taxi_driver_app/ui/screens/CUSTOMER/suggested_rides_page_customer.dart';
 import 'package:taxi_driver_app/ui/screens/error_page.dart';
+import 'package:taxi_driver_app/ui/utils/conversion_utils.dart';
+import 'package:taxi_driver_app/ui/utils/fare_calculator.dart';
 import 'package:taxi_driver_app/ui/widgets/dialog_error.dart';
 import 'package:uuid/uuid.dart';
 
@@ -87,14 +91,14 @@ class _SearchingCarState extends State<SearchingCar>
       if (arguments != null &&
           arguments.containsKey('source') &&
           arguments.containsKey('destination')) {
-        source = listPlaces.firstWhere(
+        source = placesController.allPlaces.firstWhere(
           (place) =>
               place.name.toLowerCase() ==
                   Get.arguments['source'].toString().toLowerCase() ||
               place.address.toLowerCase() ==
                   Get.arguments['source'].toString().toLowerCase(),
         );
-        destination = listPlaces.firstWhere(
+        destination = placesController.allPlaces.firstWhere(
           (place) =>
               place.name.toLowerCase() ==
                   Get.arguments['destination'].toString().toLowerCase() ||
@@ -224,41 +228,55 @@ class _SearchingCarState extends State<SearchingCar>
                       selectedRide.runtimeType == SuggestedRideModel &&
                       (successPayment != true || successPayment == null)) {
                     print("1: In the step: SelectCarRidePriceDone");
+                    var fairVariable = FareCalculator.calculateFare(
+                      ConversionUtil.metersToKilometersDouble(
+                        routeApiInfo!.distance,
+                      ),
+                      ConversionUtil.secondsToHoursOrMinutesDouble(
+                        routeApiInfo!.distance,
+                      ),
+                    );
                     return RidePaymentPageCustomer(
                       rideDetails: selectedRide!,
-                      onConfirmPayment: (selectedPaymentMethod, success) {
+                      onConfirmPayment: (selectedPaymentMethod, success) async {
                         // Handle payment confirmation
                         if (success) {
                           // Payment successful]
-                          var ride = RideModel(
-                            rideId: const Uuid().v4(),
-                            user: authController.getUserModel()!,
-                            car: carList[0],
-                            driver: carList[0].user,
-                            fare: selectedRide!.farePrice.toString(),
-                            startTime: DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day,
-                                DateTime.now().hour,
-                                DateTime.now().minute + 5),
-                            endTime: DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day,
-                                DateTime.now().hour,
-                                DateTime.now().minute + 55),
-                            rideOriginPlace: source!,
-                            rideEndPlace: destination!,
-                            rideStatus: RideStatus.pending,
-                            createdAt: DateTime.now(),
-                          );
-                          customerData.addRide(ride);
+                          CarModel? randomCar;
+                          if (driverData.allCars.isNotEmpty) {
+                            int randomIndex =
+                                Random().nextInt(driverData.allCars.length);
+                            randomCar = driverData.allCars[randomIndex];
 
-                          setState(() {
-                            rideDetails = ride;
-                            successPayment = success;
-                          });
+                            var ride = RideModel(
+                              ride_id: const Uuid().v4(),
+                              user: authController.getUserModel()!,
+                              car: randomCar,
+                              driver: randomCar.user,
+                              fare: selectedRide!.farePrice.toString(),
+                              start_time: DateTime.now(),
+                              end_time: DateTime.now().add(Duration(
+                                  seconds: routeApiInfo!.duration.toInt())),
+                              ride_origin_place: source!,
+                              ride_end_place: destination!,
+                              ride_status: RideStatus.pending,
+                              createdAt: DateTime.now(),
+                            );
+                            await customerData
+                                .addRide(ride)
+                                .then((value) => setState(() {
+                                      rideDetails = ride;
+                                      successPayment = success;
+                                    }));
+                          } else {
+                            Get.snackbar(
+                              'Sorry...',
+                              "No available Car for this ride \nPlease try again later.",
+                              backgroundColor:
+                                  const Color.fromARGB(255, 227, 241, 39),
+                              colorText: Colors.black,
+                            );
+                          }
                         } else {
                           showDialogOnError(
                             context,

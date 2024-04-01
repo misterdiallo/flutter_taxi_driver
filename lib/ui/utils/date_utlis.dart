@@ -6,6 +6,26 @@ formatToDateTimeFromApi(String date) {
   return formated;
 }
 
+DateTime stringToDate(String dateString) {
+  try {
+    return DateTime.parse(dateString.replaceAll('/', '-'));
+  } catch (e) {
+    print('Error parsing date: $e');
+    return DateTime(2050, 01, 01); //
+  }
+}
+
+DateTime convertTimestampToCST(int timestamp) {
+  // Convert timestamp (assumed to be in seconds) to DateTime in UTC
+  DateTime dateTimeUtc =
+      DateTime.fromMillisecondsSinceEpoch(timestamp * 1000, isUtc: true);
+
+  // Add 8 hours to convert to China Standard Time (UTC+8)
+  DateTime dateTimeCST = dateTimeUtc.add(const Duration(hours: 8));
+
+  return dateTimeCST;
+}
+
 String formatDateUtilsNew(DateTime date) {
   final now = DateTime.now();
   String formattedDate;

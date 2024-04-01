@@ -62,7 +62,7 @@ class AppDrawer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        authController.fullName.toString(),
+                        authController.fullName!.toUpperCase().toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 19.0,

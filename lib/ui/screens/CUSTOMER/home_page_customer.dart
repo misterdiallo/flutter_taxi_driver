@@ -4,7 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lottie/lottie.dart' as lottie;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:taxi_driver_app/core/controllers/controllers.dart';
+import 'package:taxi_driver_app/core/models/user/user_type_model.dart';
 import 'package:taxi_driver_app/ui/styles/colors.dart';
 import 'package:taxi_driver_app/ui/widgets/app_drawer.dart';
 import 'package:taxi_driver_app/ui/widgets/bottom_map_container.dart';
@@ -62,13 +64,25 @@ class _HomepageCustomerState extends State<HomepageCustomer> {
   @override
   void initState() {
     super.initState();
+
+    placesController.getAllPlaces();
+    driverData.getAllCars();
+    customerData.getAllMyRides();
+    userController.getAllTypeUsersData(UserType.driver);
     // getMyLocation();
   }
 
   Future<Position> getMyLocation() async {
+    bool currentPermissionStatusIsGranted =
+        await Permission.location.status.isGranted.then((value) => value);
     try {
+      if (!currentPermissionStatusIsGranted) {
+        await Permission.location.request();
+      }
       Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.high,
+        forceAndroidLocationManager: true,
+      );
 
       myLocation = LatLng(position.latitude, position.longitude);
       _markers.add(

@@ -47,7 +47,7 @@ class _SuggestedRidesState extends State<SuggestedRides> {
         vehicleType: "TAXI",
         image: const Icon(
           FontAwesomeIcons.taxi,
-          size: 40,
+          size: 30,
         ),
         argument: "Best choice",
         selected: true,
@@ -60,7 +60,7 @@ class _SuggestedRidesState extends State<SuggestedRides> {
         vehicleType: "LUXE",
         image: const Icon(
           FontAwesomeIcons.carRear,
-          size: 40,
+          size: 30,
         ),
         selected: false,
         farePrice: "${fareModel!.luxe.toStringAsFixed(2)} RMB",
@@ -132,21 +132,39 @@ class _SuggestedRidesState extends State<SuggestedRides> {
               child: Center(
                   child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
-                height: 40.0,
+                height: 50.0,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.primaryColor,
-                  ),
-                  onPressed: () {
-                    widget.onRideSelected!(selectedRide);
-                  },
-                  child: Text(
-                    selectedRide != null
-                        ? "BOOK NOW (${selectedRide!.farePrice})"
-                        : "BOOK NOW",
-                    style: const TextStyle(color: Colors.white, fontSize: 16.0),
-                  ),
-                ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.scaffoldBackgroundColor,
+                      side: BorderSide(color: theme.primaryColor),
+                    ),
+                    onPressed: () {
+                      widget.onRideSelected!(selectedRide);
+                    },
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'ORDER NOW\n',
+                            style: TextStyle(
+                              color: theme.primaryColor,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          if (selectedRide != null)
+                            TextSpan(
+                              text: '${selectedRide!.farePrice}',
+                              style: TextStyle(
+                                color: theme.primaryColor,
+                                fontSize: 10.0,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                        ],
+                      ),
+                    )),
               )),
             ),
           ],

@@ -41,18 +41,32 @@ class Payment extends StatelessWidget {
           child: Stack(
             children: [
               Builder(builder: (context) {
-                if (customerData.listOfMyRides.isNotEmpty) {
-                  return ListView.builder(
-                      itemCount: customerData.listOfMyDebit.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 5.0,
-                          ),
-                          child: CardContainer(
-                              cardDetail: customerData.listOfMyDebit[index]),
-                        );
-                      });
+                if (customerData.listOfMyDebit.isNotEmpty) {
+                  return Center(
+                    child: SizedBox(
+                      width: 320,
+                      child: ListView.builder(
+                          itemCount: customerData.listOfMyDebit.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 5.0,
+                              ),
+                              height: 60,
+                              alignment: Alignment.center,
+                              // decoration: BoxDecoration(
+                              //   border:
+                              //       Border.all(color: Colors.black, width: 0.3,),
+                              //   borderRadius: BorderRadius.circular(8),
+                              // ),
+                              child: CardContainer(
+                                  isPage: true,
+                                  cardDetail:
+                                      customerData.listOfMyDebit[index]),
+                            );
+                          }),
+                    ),
+                  );
                 } else {
                   return const Center(
                     child: Text("-- Empty --"),

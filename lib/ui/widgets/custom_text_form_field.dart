@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String hintText;
@@ -10,6 +11,8 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final bool readOnly;
   final TextEditingController? controller;
+  final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextFormField({
     super.key,
@@ -22,6 +25,8 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText = false,
     this.readOnly = false,
     this.controller,
+    this.validator,
+    this.inputFormatters,
   });
 
   @override
@@ -46,6 +51,7 @@ class CustomTextFormField extends StatelessWidget {
           style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
+          inputFormatters: inputFormatters,
           controller: controller,
           keyboardType: keyboardType,
           obscureText: obscureText,
@@ -68,6 +74,7 @@ class CustomTextFormField extends StatelessWidget {
               color: Colors.grey[400]!,
             ),
           ),
+          validator: validator,
         ),
       ],
     );

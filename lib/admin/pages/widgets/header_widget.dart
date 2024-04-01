@@ -4,14 +4,12 @@ import '../../constant.dart';
 import '../../responsive.dart';
 
 class Header extends StatelessWidget {
-  const Header({
-    super.key,
-    required this.scaffoldKey,
-    this.title = "",
-  });
+  const Header(
+      {super.key, required this.scaffoldKey, this.title = "", this.button});
 
   final GlobalKey<ScaffoldState> scaffoldKey;
   final String title;
+  final Widget? button;
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +36,30 @@ class Header extends StatelessWidget {
           // if (!Responsive.isMobile(context))
           Expanded(
             flex: 4,
-            child: Text(
-              title.toString(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontSize: 20,
+            child: button != null
+                ? Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          title.toString(),
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    fontSize: 20,
+                                  ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      button!,
+                    ],
+                  )
+                : Text(
+                    title.toString(),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: 20,
+                        ),
+                    textAlign: TextAlign.center,
                   ),
-              textAlign: TextAlign.center,
-            ),
           ),
           if (Responsive.isMobile(context))
             Row(

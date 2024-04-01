@@ -16,7 +16,7 @@ class ActivityDetailsCard extends StatelessWidget {
     HealthModel(
         icon: 'assets/svg/steps.svg',
         value: users
-            .where((user) => user.userType == UserType.customer)
+            .where((user) => user.user_type == UserType.customer)
             .length
             .toString(),
         title: "Total Customer"),

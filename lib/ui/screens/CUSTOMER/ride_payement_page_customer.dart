@@ -3,10 +3,11 @@ import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import 'package:taxi_driver_app/core/models/payement_card.dart';
 import 'package:taxi_driver_app/core/models/suggested_ride_model.dart';
 import 'package:taxi_driver_app/core/services/payment_service.dart';
+import 'package:taxi_driver_app/ui/widgets/card_container.dart';
 
 class RidePaymentPageCustomer extends StatefulWidget {
   final SuggestedRideModel rideDetails;
-  final void Function(PaymentCardModel selectedPaymentMethod, bool success)
+  final Future Function(PaymentCardModel selectedPaymentMethod, bool success)
       onConfirmPayment;
 
   const RidePaymentPageCustomer({
@@ -29,13 +30,13 @@ class _RidePaymentPageCustomerState extends State<RidePaymentPageCustomer> {
       _isProcessingPayment = true;
     });
     // Simulate a payment process (replace with actual logic)
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 0));
     // Payment successful for demonstration purposes
     bool success = true;
+    await widget.onConfirmPayment(_selectedPaymentMethod!, success);
     setState(() {
       _isProcessingPayment = false;
     });
-    widget.onConfirmPayment(_selectedPaymentMethod!, success);
   }
 
   @override
@@ -75,13 +76,22 @@ class _RidePaymentPageCustomerState extends State<RidePaymentPageCustomer> {
                   itemCount: customerData.listOfMyDebit.length,
                   itemBuilder: (context, index) {
                     final paymentMethod = customerData.listOfMyDebit[index];
+
                     return Card(
+                      elevation: 0,
                       color: _selectedPaymentMethod == paymentMethod
-                          ? theme.primaryColor.withOpacity(0.4)
-                          : null,
-                      child: ListTile(
-                        title: Text(paymentMethod.cardNumber),
-                        subtitle: Text(paymentMethod.type.name.toUpperCase()),
+                          ? theme.primaryColor.withOpacity(0.8)
+                          : theme.scaffoldBackgroundColor,
+                      child: InkWell(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 2.0,
+                            horizontal: 2.0,
+                          ),
+                          height: 70,
+                          child: CardContainer(
+                              cardDetail: customerData.listOfMyDebit[index]),
+                        ),
                         onTap: () {
                           setState(() {
                             _selectedPaymentMethod = paymentMethod;
@@ -127,7 +137,7 @@ class _RidePaymentPageCustomerState extends State<RidePaymentPageCustomer> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          'Total Ride Cost',
+                          'Ride Cost',
                           style: theme.textTheme.labelMedium!.copyWith(
                             fontSize: 13,
                             color: theme.hintColor,
@@ -136,7 +146,7 @@ class _RidePaymentPageCustomerState extends State<RidePaymentPageCustomer> {
                         Text(
                           '${widget.rideDetails.farePrice}',
                           style: theme.textTheme.bodyLarge!.copyWith(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -154,10 +164,11 @@ class _RidePaymentPageCustomerState extends State<RidePaymentPageCustomer> {
                                 color: theme.scaffoldBackgroundColor,
                               )
                             : RichText(
+                                textAlign: TextAlign.center,
                                 text: TextSpan(
-                                  text: "Confirm Payment\n",
+                                  text: "PAY NOW\n",
                                   style: theme.textTheme.bodyMedium!.copyWith(
-                                    fontSize: 18,
+                                    fontSize: 14,
                                     color: theme.scaffoldBackgroundColor,
                                   ),
                                   children: [
@@ -169,7 +180,7 @@ class _RidePaymentPageCustomerState extends State<RidePaymentPageCustomer> {
                                               _selectedPaymentMethod!.type.name,
                                           style: theme.textTheme.labelMedium!
                                               .copyWith(
-                                            fontSize: 13,
+                                            fontSize: 10,
                                             color: theme.hintColor,
                                             fontWeight: FontWeight.w700,
                                           ),

@@ -28,7 +28,7 @@ class UserProvider extends GetConnect {
         // decoder: UserModel.fromJson,
       );
   Future<Response<UserModel>> update(UserModel user) => put(
-        '/users/${user.userId}',
+        '/users/${user.user_id}',
         user.toJson(),
         // decoder: UserModel.fromJson,
       );

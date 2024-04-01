@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import '../../../core/controllers/auth/login_controller.dart';
 import '../../../router.dart';
 import '../../styles/colors.dart';
@@ -65,8 +66,8 @@ class Login extends StatelessWidget {
             ),
             const SizedBox(height: 30.0),
             _loginForm(context),
-            const SizedBox(height: 30.0),
-            _socialLoginButtons(theme),
+            // const SizedBox(height: 30.0),
+            // _socialLoginButtons(theme),
           ],
         ),
       ),
@@ -88,20 +89,20 @@ class Login extends StatelessWidget {
           controller: _loginController.passwordController,
           hintText: "Password",
         ),
-        const SizedBox(height: 20.0),
-        GestureDetector(
-          onTap: () {
-            // Handle forgot password action
-          },
-          child: Text(
-            "Forgot password?",
-            style: TextStyle(
-              color: theme.primaryColor,
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+        // const SizedBox(height: 20.0),
+        // GestureDetector(
+        //   onTap: () {
+        //     // Handle forgot password action
+        //   },
+        //   child: Text(
+        //     "Forgot password?",
+        //     style: TextStyle(
+        //       color: theme.primaryColor,
+        //       fontSize: 16.0,
+        //       fontWeight: FontWeight.bold,
+        //     ),
+        //   ),
+        // ),
         const SizedBox(height: 25.0),
         SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -110,17 +111,20 @@ class Login extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: theme.primaryColor,
             ),
-            onPressed: _loginController.login,
-            child: Obx(
-              () => _loginController.isLoading.value
-                  ? CircularProgressIndicator(
-                      color: theme.scaffoldBackgroundColor,
-                    )
-                  : const Text(
-                      "LOG IN",
-                      style: TextStyle(color: Colors.white, fontSize: 16.0),
-                    ),
-            ),
+            onPressed: () =>
+                loginController.isLoading.value ? {} : loginController.login(),
+            child: Obx(() {
+              if (loginController.isLoading.value) {
+                return CircularProgressIndicator(
+                  color: theme.scaffoldBackgroundColor,
+                );
+              } else {
+                return const Text(
+                  "LOGIN",
+                  style: TextStyle(color: Colors.white, fontSize: 16.0),
+                );
+              }
+            }),
           ),
         ),
       ],
@@ -166,39 +170,39 @@ class Login extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          //
-          margin: const EdgeInsets.only(top: 10.0),
-          height: 45.0,
-          child: ElevatedButton(
-            onPressed: () {
-              // Handle phone number login
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: theme.primaryColor,
-            ),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  FontAwesomeIcons.google,
-                  color: theme.scaffoldBackgroundColor,
-                ),
-                Expanded(
-                  child: Text(
-                    "Google",
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyLarge!.merge(
-                      TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: theme.scaffoldBackgroundColor,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        // Container(
+        //   //
+        //   margin: const EdgeInsets.only(top: 10.0),
+        //   height: 45.0,
+        //   child: ElevatedButton(
+        //     onPressed: () {
+        //       // Handle phone number login
+        //     },
+        //     style: ElevatedButton.styleFrom(
+        //       backgroundColor: theme.primaryColor,
+        //     ),
+        //     child: Row(
+        //       children: <Widget>[
+        //         Icon(
+        //           FontAwesomeIcons.google,
+        //           color: theme.scaffoldBackgroundColor,
+        //         ),
+        //         Expanded(
+        //           child: Text(
+        //             "Google",
+        //             textAlign: TextAlign.center,
+        //             style: theme.textTheme.bodyLarge!.merge(
+        //               TextStyle(
+        //                 fontWeight: FontWeight.bold,
+        //                 color: theme.scaffoldBackgroundColor,
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         Container(
           // decoration: BoxDecoration(
           //   border: Border.all(

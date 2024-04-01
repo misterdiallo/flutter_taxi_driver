@@ -143,14 +143,14 @@ class _RideDriverTabState extends State<RideDriverTab> {
                                   minVerticalPadding: 0,
                                   dense: true,
                                   subtitle: Text(
-                                    ride.rideOriginPlace.address,
+                                    ride.ride_origin_place.address,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w300,
                                       fontSize: 12,
                                     ),
                                   ),
                                   title: Text(
-                                    ride.rideOriginPlace.name,
+                                    ride.ride_origin_place.name,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14,
@@ -160,14 +160,14 @@ class _RideDriverTabState extends State<RideDriverTab> {
                                 ListTile(
                                   dense: true,
                                   subtitle: Text(
-                                    ride.rideEndPlace.address,
+                                    ride.ride_end_place.address,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w300,
                                       fontSize: 12,
                                     ),
                                   ),
                                   title: Text(
-                                    ride.rideEndPlace.name,
+                                    ride.ride_end_place.name,
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14,
@@ -181,7 +181,7 @@ class _RideDriverTabState extends State<RideDriverTab> {
                       ),
                     ),
                     Builder(builder: (context) {
-                      if (ride.rideStatus == RideStatus.pending) {
+                      if (ride.ride_status == RideStatus.pending) {
                         return Padding(
                           padding: const EdgeInsets.only(right: 10.0),
                           child: Column(
@@ -257,7 +257,7 @@ class _RideDriverTabState extends State<RideDriverTab> {
                               ),
                             ),
                             child: Text(
-                              ride.rideStatus.name.toUpperCase(),
+                              ride.ride_status.name.toUpperCase(),
                               style: theme.textTheme.bodyLarge!.copyWith(
                                 // fontSize: 1,
                                 fontWeight: FontWeight.bold,

@@ -1,55 +1,55 @@
-import 'package:dob_input_field/dob_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:taxi_driver_app/admin/pages/widgets/build_table_user.dart';
-import 'package:taxi_driver_app/core/controllers/app/app_constant.dart';
 import 'package:taxi_driver_app/core/controllers/controllers.dart';
-import 'package:taxi_driver_app/core/models/car_model.dart';
 import 'package:taxi_driver_app/core/models/place_model.dart';
-import 'package:taxi_driver_app/core/models/user/user_model.dart';
-import 'package:taxi_driver_app/core/models/user/user_type_model.dart';
-import 'package:taxi_driver_app/ui/utils/date_utlis.dart';
+import 'package:taxi_driver_app/core/models/ride_model.dart';
+import 'package:taxi_driver_app/core/services/place_service.dart';
+import 'package:taxi_driver_app/core/services/ride_service.dart';
 import 'package:taxi_driver_app/ui/utils/input_formatters.dart';
 import 'package:taxi_driver_app/ui/widgets/custom_text_form_field.dart';
 
 import '../responsive.dart';
+import 'widgets/activity_details_card.dart';
+import 'widgets/bar_graph_card.dart';
+import 'widgets/build_table_user.dart';
 import 'widgets/header_widget.dart';
+import 'widgets/line_chart_card.dart';
 
-class AdminDriverPage extends StatefulWidget {
+class AdminPlacesPage extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const AdminDriverPage({super.key, required this.scaffoldKey});
+  const AdminPlacesPage({super.key, required this.scaffoldKey});
 
   @override
-  State<AdminDriverPage> createState() => _AdminDriverPageState();
+  State<AdminPlacesPage> createState() => _AdminPlacesPageState();
 }
 
-class _AdminDriverPageState extends State<AdminDriverPage> {
+class _AdminPlacesPageState extends State<AdminPlacesPage> {
   var isSavingNewPlace = false;
   @override
   void initState() {
     super.initState();
-    userController.getAllTypeUsersData(UserType.driver);
+    placesController.getAllPlaces();
   }
 
   // Define a method to add a new place
-  void addNewDriver() async {
+  void addNewPlace() async {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    TextEditingController fullname = TextEditingController();
-    TextEditingController email = TextEditingController();
-    TextEditingController phoneNumber = TextEditingController();
-    TextEditingController address = TextEditingController();
-    TextEditingController datebirth = TextEditingController();
-    TextEditingController licenceNumber = TextEditingController();
-    TextEditingController plateNumber = TextEditingController();
-    TextEditingController modelCar = TextEditingController();
-    TextEditingController color = TextEditingController();
+    TextEditingController nameController = TextEditingController();
+    TextEditingController addressController = TextEditingController();
+    TextEditingController latitudeController = TextEditingController();
+    TextEditingController longitudeController = TextEditingController();
+    TextEditingController descriptionController = TextEditingController();
+    TextEditingController photoUrlController = TextEditingController();
+    TextEditingController typeController = TextEditingController();
+    TextEditingController phoneNumberController = TextEditingController();
+    TextEditingController websiteController = TextEditingController();
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-            title: const Text('Add New Driver'),
+            title: const Text('Add New Place'),
             content: StatefulBuilder(builder: (context, setState) {
               return isSavingNewPlace
                   ? SingleChildScrollView(
@@ -66,8 +66,8 @@ class _AdminDriverPageState extends State<AdminDriverPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomTextFormField(
-                              hintText: 'Full Name',
-                              controller: fullname,
+                              hintText: 'Location Name',
+                              controller: nameController,
                               keyboardType: TextInputType.name,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -81,19 +81,84 @@ class _AdminDriverPageState extends State<AdminDriverPage> {
                               height: 18,
                             ),
                             CustomTextFormField(
-                              hintText: 'Email',
-                              controller: email,
-                              keyboardType: TextInputType.emailAddress,
+                              hintText: 'Address',
+                              controller: addressController,
+                              keyboardType: TextInputType.streetAddress,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter the Email';
-                                }
-                                if (!InputFormatters.emailRegex
-                                    .hasMatch(value)) {
-                                  return "Email is incorrect.";
+                                  return 'Please enter the Adress';
                                 }
                                 return null;
                               },
+                              showLabel: false,
+                            ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                            CustomTextFormField(
+                              hintText: 'Latitude',
+                              controller: latitudeController,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Latitude is required';
+                                }
+                                if (!InputFormatters.latlgRegex
+                                    .hasMatch(value)) {
+                                  return "Latitude is incorrect.";
+                                }
+                                return null;
+                              },
+                              showLabel: false,
+                            ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                            CustomTextFormField(
+                              hintText: 'Longitude',
+                              controller: longitudeController,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Longiture is required';
+                                }
+                                if (!InputFormatters.latlgRegex
+                                    .hasMatch(value)) {
+                                  return "Longitude is incorrect.";
+                                }
+                                return null;
+                              },
+                              showLabel: false,
+                            ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                            CustomTextFormField(
+                              hintText: 'Description',
+                              controller: descriptionController,
+                              keyboardType: TextInputType.text,
+                              showLabel: false,
+                            ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                            CustomTextFormField(
+                              hintText: 'Photo URL',
+                              controller: photoUrlController,
+                              keyboardType: TextInputType.url,
+                              showLabel: false,
+                            ),
+                            const SizedBox(
+                              height: 18,
+                            ),
+                            CustomTextFormField(
+                              hintText: 'Type of Place',
+                              controller: typeController,
+                              keyboardType: TextInputType.name,
                               showLabel: false,
                             ),
                             const SizedBox(
@@ -101,112 +166,17 @@ class _AdminDriverPageState extends State<AdminDriverPage> {
                             ),
                             CustomTextFormField(
                               hintText: 'Phone Number',
-                              controller: phoneNumber,
+                              controller: phoneNumberController,
                               keyboardType: TextInputType.phone,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Phone is required';
-                                }
-                                if (!InputFormatters.phoneNumberRegex
-                                    .hasMatch(value)) {
-                                  return "Phone is incorrect.";
-                                }
-                                return null;
-                              },
                               showLabel: false,
                             ),
                             const SizedBox(
                               height: 18,
                             ),
                             CustomTextFormField(
-                              hintText: 'Full Address',
-                              controller: address,
-                              keyboardType: TextInputType.streetAddress,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Adress is required';
-                                }
-                                return null;
-                              },
-                              showLabel: false,
-                            ),
-                            const SizedBox(
-                              height: 18,
-                            ),
-                            CustomTextFormField(
-                              hintText: 'Date of birth(YYYY/MM/DD)',
-                              showLabel: true,
-                              controller: datebirth,
-                              keyboardType: TextInputType.datetime,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Date of birth is required';
-                                }
-                                if (!InputFormatters.dateOfBirthRegex
-                                    .hasMatch(value)) {
-                                  return "Incorrect date of birth";
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(
-                              height: 18,
-                            ),
-                            CustomTextFormField(
-                              hintText: 'Car Licence Number',
-                              controller: licenceNumber,
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Car Licence number is required';
-                                }
-                                return null;
-                              },
-                              showLabel: false,
-                            ),
-                            const SizedBox(
-                              height: 18,
-                            ),
-                            CustomTextFormField(
-                              hintText: 'Car Plate Number',
-                              controller: plateNumber,
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Car Plate number is required';
-                                }
-                                return null;
-                              },
-                              showLabel: false,
-                            ),
-                            const SizedBox(
-                              height: 18,
-                            ),
-                            CustomTextFormField(
-                              hintText: 'Car model',
-                              controller: modelCar,
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Car model is required';
-                                }
-                                return null;
-                              },
-                              showLabel: false,
-                            ),
-                            const SizedBox(
-                              height: 18,
-                            ),
-                            CustomTextFormField(
-                              hintText: 'Car color',
-                              controller: color,
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Car color is required';
-                                }
-                                return null;
-                              },
+                              hintText: 'Website',
+                              controller: websiteController,
+                              keyboardType: TextInputType.url,
                               showLabel: false,
                             ),
                             const SizedBox(
@@ -226,40 +196,36 @@ class _AdminDriverPageState extends State<AdminDriverPage> {
                                       setState(() {
                                         isSavingNewPlace = true;
                                       });
-                                      String fullNameValue = fullname.text;
-                                      String emailValue = email.text;
-                                      String phoneNumberValue =
-                                          phoneNumber.text;
-                                      String addressValue = address.text;
-                                      DateTime dateOfBirthValue =
-                                          stringToDate(datebirth.text);
-                                      String licenseNumberValue =
-                                          licenceNumber.text;
-                                      String plateNumberValue =
-                                          plateNumber.text;
-                                      String modelCarValue = modelCar.text;
-                                      String colorValue = color.text;
-
-                                      UserModel driver = UserModel(
-                                        user_id: "user_id",
-                                        full_name: fullNameValue,
-                                        email: emailValue,
-                                        phone_number: phoneNumberValue,
-                                        user_type: UserType.driver,
-                                        address: addressValue,
-                                        date_of_birth: dateOfBirthValue,
-                                        is_active: true,
+                                      // Validate the form
+                                      String name = nameController.text;
+                                      String address = addressController.text;
+                                      double latitude = double.tryParse(
+                                              latitudeController.text) ??
+                                          0.0;
+                                      double longitude = double.tryParse(
+                                              longitudeController.text) ??
+                                          0.0;
+                                      String description =
+                                          descriptionController.text;
+                                      String photoUrl = photoUrlController.text;
+                                      String type = typeController.text;
+                                      String phoneNumber =
+                                          phoneNumberController.text;
+                                      String website = websiteController.text;
+                                      PlaceModel newPlace = PlaceModel(
+                                        place_id: UniqueKey().toString(),
+                                        name: name,
+                                        address: address,
+                                        latitude: latitude,
+                                        longitude: longitude,
+                                        description: description,
+                                        photo_url: photoUrl,
+                                        type_place: type,
+                                        phone_number: phoneNumber,
+                                        website: website,
                                       );
-                                      CarModel car = CarModel(
-                                        car_id: "car_id",
-                                        license_number: licenseNumberValue,
-                                        model: modelCarValue,
-                                        plate_number: plateNumberValue,
-                                        color: colorValue,
-                                        user: driver,
-                                      );
-                                      await driverData
-                                          .newDriverWithCar(driver, car)
+                                      await placesController
+                                          .addNewPlace(newPlace)
                                           .then((value) {
                                         setState(() {
                                           isSavingNewPlace = false;
@@ -268,14 +234,14 @@ class _AdminDriverPageState extends State<AdminDriverPage> {
                                           Get.back();
                                           Get.snackbar(
                                             'Saving Success',
-                                            "The new Driver with his Car have been saved.",
+                                            "The new place have been saved.",
                                             backgroundColor: Colors.green[900],
                                             colorText: Colors.white,
                                           );
                                         } else {
                                           Get.snackbar(
                                             'Saving Error',
-                                            "Error occured while saving the new Driver.",
+                                            "Error occured while save the new place.",
                                             backgroundColor: Colors.red[900],
                                             colorText: Colors.white,
                                           );
@@ -301,6 +267,7 @@ class _AdminDriverPageState extends State<AdminDriverPage> {
     SizedBox height(BuildContext context) => SizedBox(
           height: Responsive.isDesktop(context) ? 30 : 20,
         );
+
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: SingleChildScrollView(
@@ -314,10 +281,10 @@ class _AdminDriverPageState extends State<AdminDriverPage> {
               ),
               Header(
                 scaffoldKey: widget.scaffoldKey,
-                title: "Drivers",
+                title: "List of Locations",
                 button: ElevatedButton(
                   onPressed:
-                      addNewDriver, // Replace 'Button' with your button text
+                      addNewPlace, // Replace 'Button' with your button text
                   style: ElevatedButton.styleFrom(
                     // Style your button here
                     foregroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -330,13 +297,13 @@ class _AdminDriverPageState extends State<AdminDriverPage> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 12, horizontal: 16), // Padding
                   ), // Replace Icons.add with your desired icon
-                  child: const Text('New Driver'),
+                  child: const Text('New Place'),
                 ),
               ),
               height(context),
               LayoutBuilder(
                 builder: (context, constraints) {
-                  return const BuildTableUsers(users: UserType.driver);
+                  return const PlacesTable();
                 },
               ),
             ],

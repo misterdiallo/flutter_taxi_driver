@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import 'package:taxi_driver_app/core/models/ride_model.dart';
 import 'package:taxi_driver_app/core/services/ride_service.dart';
 
@@ -20,6 +21,12 @@ class AdminRidePage extends StatefulWidget {
 
 class _AdminRidePageState extends State<AdminRidePage> {
   @override
+  void initState() {
+    super.initState();
+    ridesController.getAllRides();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SizedBox height(BuildContext context) => SizedBox(
           height: Responsive.isDesktop(context) ? 30 : 20,
@@ -36,7 +43,7 @@ class _AdminRidePageState extends State<AdminRidePage> {
               SizedBox(
                 height: Responsive.isMobile(context) ? 5 : 18,
               ),
-              Header(scaffoldKey: widget.scaffoldKey, title: "Rides"),
+              Header(scaffoldKey: widget.scaffoldKey, title: "All Rides"),
               height(context),
               LayoutBuilder(
                 builder: (context, constraints) {

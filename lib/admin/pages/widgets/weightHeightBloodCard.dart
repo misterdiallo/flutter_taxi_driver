@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:taxi_driver_app/admin/constant.dart';
+import 'package:taxi_driver_app/core/controllers/auth/users_controller.dart';
+import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import 'package:taxi_driver_app/core/models/user/user_type_model.dart';
 import 'package:taxi_driver_app/core/services/user_service.dart';
 
 import 'custom_card.dart';
 
-class WeightHeightBloodCard extends StatelessWidget {
+class WeightHeightBloodCard extends StatefulWidget {
   const WeightHeightBloodCard({
     super.key,
   });
+
+  @override
+  State<WeightHeightBloodCard> createState() => _WeightHeightBloodCardState();
+}
+
+class _WeightHeightBloodCardState extends State<WeightHeightBloodCard> {
+  @override
+  void initState() {
+    super.initState();
+    userController.countUsers(UserType.admin);
+    userController.countUsers(UserType.driver);
+    userController.countUsers(UserType.customer);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,24 +34,18 @@ class WeightHeightBloodCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          details(
+          Obx(
+            () => details(
               "Customer",
-              users
-                  .where((user) => user.userType == UserType.customer)
-                  .length
-                  .toString()),
-          details(
-              "Driver",
-              users
-                  .where((user) => user.userType == UserType.driver)
-                  .length
-                  .toString()),
-          details(
-              "Admin",
-              users
-                  .where((user) => user.userType == UserType.admin)
-                  .length
-                  .toString()),
+              userController.totalCustomer.value.toString(),
+            ),
+          ),
+          Obx(
+            () => details("Driver", userController.totalDriver.toString()),
+          ),
+          Obx(
+            () => details("Admin", userController.totalAdmin.toString()),
+          ),
         ],
       ),
     );

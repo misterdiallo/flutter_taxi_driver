@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import 'package:taxi_driver_app/core/models/place_model.dart';
 import 'package:taxi_driver_app/core/services/place_service.dart';
 import 'package:taxi_driver_app/router.dart';
@@ -21,7 +22,7 @@ class _DestinationViewCustomerState extends State<DestinationViewCustomer> {
   searchPlaces(String query) {
     if (query.isNotEmpty) {
       setState(() {
-        shortedList = listPlaces
+        shortedList = placesController.allPlaces
             .where((place) =>
                 place.name.toLowerCase().contains(query.toLowerCase()) ||
                 place.address.toLowerCase().contains(query.toLowerCase()))
@@ -36,7 +37,7 @@ class _DestinationViewCustomerState extends State<DestinationViewCustomer> {
 
   final List<PlaceModel> _destinations = [
     PlaceModel(
-        placeId: "0000000",
+        place_id: "0000000",
         name: "",
         address: "",
         latitude: 0000,
@@ -321,7 +322,7 @@ class _DestinationViewCustomerState extends State<DestinationViewCustomer> {
     return SingleChildScrollView(
       child: Column(
         children: suggestionPlacesList == null || suggestionPlacesList.isEmpty
-            ? listPlaces.map((place) {
+            ? placesController.allPlaces.map((place) {
                 var column = linePlaceData(place);
                 return column;
               }).toList()

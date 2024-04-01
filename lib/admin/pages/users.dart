@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import 'package:taxi_driver_app/core/models/user/user_model.dart';
 import 'package:taxi_driver_app/core/models/user/user_type_model.dart';
 import 'package:taxi_driver_app/core/services/user_service.dart';
@@ -21,12 +23,16 @@ class AdminUserPage extends StatefulWidget {
 
 class _AdminUserPageState extends State<AdminUserPage> {
   @override
+  void initState() {
+    super.initState();
+    userController.getAllTypeUsersData(UserType.customer);
+  }
+
+  @override
   Widget build(BuildContext context) {
     SizedBox height(BuildContext context) => SizedBox(
           height: Responsive.isDesktop(context) ? 30 : 20,
         );
-    List<UserModel> customer =
-        users.where((user) => user.userType == UserType.customer).toList();
 
     return SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -43,7 +49,7 @@ class _AdminUserPageState extends State<AdminUserPage> {
               height(context),
               LayoutBuilder(
                 builder: (context, constraints) {
-                  return BuildTableUsers(users: customer);
+                  return const BuildTableUsers(users: UserType.customer);
                 },
               ),
             ],

@@ -73,8 +73,8 @@ class _RideDetailsState extends State<RideDetails>
     if (widget.ride == null) {
       Get.offAllNamed(DriverRoute);
     } else {
-      source = widget.ride!.rideOriginPlace;
-      destination = widget.ride!.rideEndPlace;
+      source = widget.ride!.ride_origin_place;
+      destination = widget.ride!.ride_end_place;
       _routes = <RouteDetails>[
         RouteDetails(
             MapLatLng(source!.latitude, source!.longitude),

@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:slide_to_act/slide_to_act.dart';
+import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import 'package:taxi_driver_app/core/models/ride_model.dart';
 import 'package:taxi_driver_app/router.dart';
 import 'package:taxi_driver_app/ui/widgets/get_color_function.dart';
@@ -20,31 +21,11 @@ class RideDetailsCustomer extends StatefulWidget {
 }
 
 class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
-  RideStatus? rideStatus;
-
-  Future<void> updateStatusAfterTime() async {
-    await Future.delayed(const Duration(seconds: 10), () {
-      setState(() {
-        rideStatus = RideStatus.accepted;
-      });
-    });
-    await Future.delayed(const Duration(seconds: 10), () {
-      setState(() {
-        rideStatus = RideStatus.ongoing;
-      });
-    });
-    await Future.delayed(const Duration(seconds: 30), () {
-      setState(() {
-        rideStatus = RideStatus.completed;
-      });
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    updateStatusAfterTime();
+    // updateStatusAfterTime();
   }
 
   @override
@@ -63,14 +44,12 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                 children: [
                   Center(
                     child: Text(
-                      (rideStatus != null)
-                          ? (rideStatus!.name == RideStatus.pending.name)
-                              ? 'Driver on the way...'
-                              : "Ride is ${rideStatus!.name.toUpperCase()}..."
-                          : 'Driver on the way...',
+                      (ride.ride_status.name == RideStatus.pending.name)
+                          ? 'Driver on the way...'
+                          : "Ride is ${ride.ride_status.name.toUpperCase()}...",
                       style: theme.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.w300,
-                        fontSize: 25,
+                        fontSize: 20,
                       ),
                     ),
                   ),
@@ -97,7 +76,7 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                                   ),
                                 ),
                                 Text(
-                                  ride.car!.user.fullName,
+                                  ride.car!.user.full_name,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
@@ -110,7 +89,7 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                                     color: theme.primaryColor,
                                   ),
                                   itemCount: 5,
-                                  itemSize: 15.0,
+                                  itemSize: 10.0,
                                 ),
                               ],
                             ),
@@ -121,16 +100,16 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.6,
                             constraints: const BoxConstraints(maxWidth: 500),
-                            child: Row(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     RichText(
                                       text: TextSpan(
-                                        text: ride.car!.plateNumber,
+                                        text: ride.car!.plate_number,
                                         style: theme.textTheme.bodyLarge!
                                             .copyWith(
                                                 fontWeight: FontWeight.bold,
@@ -153,10 +132,10 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                                           ),
                                         ),
                                         const SizedBox(
-                                          width: 25,
+                                          width: 20,
                                         ),
                                         SizedBox(
-                                          width: 55,
+                                          width: 50,
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -183,25 +162,44 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                                     ),
                                   ],
                                 ),
-                                Card(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    child: RichText(
-                                      textAlign: TextAlign.center,
-                                      text: TextSpan(
-                                        text: rideStatus == null
-                                            ? ride.rideStatus.name.toUpperCase()
-                                            : rideStatus!.name.toUpperCase(),
-                                        style:
-                                            theme.textTheme.bodyLarge!.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 18,
-                                          color: theme.primaryColor,
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Status: ",
+                                      style:
+                                          theme.textTheme.bodyLarge!.copyWith(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Card(
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        child: RichText(
+                                          textAlign: TextAlign.center,
+                                          text: TextSpan(
+                                            text: ride.ride_status.name
+                                                .toUpperCase(),
+                                            style: theme.textTheme.bodyLarge!
+                                                .copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15,
+                                              color: theme.primaryColor,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -265,7 +263,8 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                             RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
-                                text: "Today\n",
+                                text:
+                                    "0${'${ride.start_time.month}'}. ${ride.start_time.day}th\n",
                                 style: theme.textTheme.bodyLarge!.copyWith(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 10,
@@ -274,7 +273,7 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                                 children: [
                                   TextSpan(
                                     text:
-                                        "${ride.startTime.hour > 9 ? ride.startTime.hour : '0${ride.startTime.hour}'}:${ride.startTime.minute > 9 ? ride.startTime.minute : '0${ride.startTime.minute}'}",
+                                        "0${ride.start_time.hour > 9 ? ride.start_time.hour : '0${ride.start_time.hour}'}:${ride.start_time.minute > 9 ? ride.start_time.minute : '0${ride.start_time.minute}'}",
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
@@ -290,7 +289,8 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                             RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
-                                text: "Today\n",
+                                text:
+                                    "${'${ride.end_time!.month}'}. ${ride.end_time!.day}th\n",
                                 style: theme.textTheme.bodyLarge!.copyWith(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 10,
@@ -299,7 +299,7 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                                 children: [
                                   TextSpan(
                                     text:
-                                        "${ride.endTime!.hour > 9 ? ride.endTime!.hour : '0${ride.endTime!.hour}'}:${ride.endTime!.minute > 9 ? ride.endTime!.minute : '0${ride.endTime!.minute}'}",
+                                        "${ride.end_time!.hour > 9 ? ride.end_time!.hour : '0${ride.end_time!.hour}'}:${ride.end_time!.minute > 9 ? ride.end_time!.minute : '0${ride.end_time!.minute}'}",
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
@@ -321,14 +321,14 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                                 minVerticalPadding: 0,
                                 dense: true,
                                 subtitle: Text(
-                                  ride.rideOriginPlace.address,
+                                  ride.ride_origin_place.address,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w300,
                                     fontSize: 12,
                                   ),
                                 ),
                                 title: Text(
-                                  ride.rideOriginPlace.name,
+                                  ride.ride_origin_place.name,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 14,
@@ -338,14 +338,14 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                               ListTile(
                                 dense: true,
                                 subtitle: Text(
-                                  ride.rideEndPlace.address,
+                                  ride.ride_end_place.address,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w300,
                                     fontSize: 12,
                                   ),
                                 ),
                                 title: Text(
-                                  ride.rideEndPlace.name,
+                                  ride.ride_end_place.name,
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 14,
@@ -373,21 +373,25 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                           (BuildContext context, StateSetter setState) {
                         var slideAction = SlideAction(
                           key: key,
-                          onSubmit: () {
-                            Future.delayed(const Duration(seconds: 2), () {
-                              if (key.currentState!.submitted) {
-                                return Get.offAllNamed(HomepageRoute);
-                              } else {
-                                key.currentState!.reset();
-                                return null;
-                              }
-                            });
-                            return null;
+                          onSubmit: () async {
+                            if (key.currentState!.submitted) {
+                              print("in the submitedd");
+                              await customerData.updatedRideStatus(
+                                  ride.ride_id, RideStatus.canceled);
+
+                              Get.offAllNamed(HomepageRoute);
+                            } else {
+                              key.currentState!.reset();
+                              return null;
+                            }
                           },
                           text: "Slide to Cancel",
                           outerColor: theme.primaryColor,
                           sliderButtonIcon: const Icon(
                             FontAwesomeIcons.xmark,
+                          ),
+                          submittedIcon: CircularProgressIndicator(
+                            color: theme.scaffoldBackgroundColor,
                           ),
                           height: 60,
                           sliderButtonIconPadding: 15,
@@ -399,128 +403,126 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                           ),
                         );
 
-                        if (rideStatus != null) {
-                          if ((rideStatus!.name != RideStatus.ongoing.name) &&
-                              (rideStatus!.name != RideStatus.completed.name)) {
-                            return slideAction;
-                          } else {
-                            return Center(
-                              child: RatingBar.builder(
-                                itemPadding: const EdgeInsets.all(10.0),
-                                initialRating: 0,
-                                itemCount: 5,
-                                itemBuilder: (context, index) {
-                                  switch (index) {
-                                    case 0:
-                                      return Column(
-                                        children: [
-                                          const Icon(
-                                            Icons.sentiment_very_dissatisfied,
-                                            color: Colors.red,
-                                            size: 30,
-                                          ),
-                                          Text(
-                                            "Poor",
-                                            style: theme.textTheme.bodyLarge!
-                                                .copyWith(
-                                              color: Colors.red,
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 10,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    case 1:
-                                      return Column(
-                                        children: [
-                                          const Icon(
-                                            Icons.sentiment_dissatisfied,
-                                            color: Colors.orange,
-                                            size: 30,
-                                          ),
-                                          Text(
-                                            "Fair",
-                                            style: theme.textTheme.bodyLarge!
-                                                .copyWith(
-                                              color: Colors.orange,
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 10,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    case 2:
-                                      return Column(
-                                        children: [
-                                          Icon(
-                                            Icons.sentiment_neutral,
-                                            color: Colors.amber[600],
-                                            size: 30,
-                                          ),
-                                          Text(
-                                            "Average",
-                                            style: theme.textTheme.bodyLarge!
-                                                .copyWith(
-                                              color: Colors.amber[600],
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 10,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    case 3:
-                                      return Column(
-                                        children: [
-                                          const Icon(
-                                            Icons.sentiment_satisfied,
-                                            color: Colors.green,
-                                            size: 30,
-                                          ),
-                                          Text(
-                                            "Good",
-                                            style: theme.textTheme.bodyLarge!
-                                                .copyWith(
-                                              color: Colors.green,
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 10,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    case 4:
-                                      return Column(
-                                        children: [
-                                          const Icon(
-                                            Icons.sentiment_very_satisfied,
-                                            color: Colors.blue,
-                                            size: 30,
-                                          ),
-                                          Text(
-                                            "Excellent",
-                                            style: theme.textTheme.bodyLarge!
-                                                .copyWith(
-                                              color: Colors.blue,
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 10,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    default:
-                                      return const Icon(
-                                        Icons.sentiment_very_satisfied,
-                                        color: Colors.green,
-                                      );
-                                  }
-                                },
-                                onRatingUpdate: (rating) {
-                                  print(rating);
-                                },
-                              ),
-                            );
-                          }
-                        } else {
+                        if ((ride.ride_status.name !=
+                                RideStatus.ongoing.name) &&
+                            (ride.ride_status.name !=
+                                RideStatus.completed.name)) {
                           return slideAction;
+                        } else {
+                          return Center(
+                            child: RatingBar.builder(
+                              itemPadding: const EdgeInsets.all(10.0),
+                              initialRating: 0,
+                              itemCount: 5,
+                              itemBuilder: (context, index) {
+                                switch (index) {
+                                  case 0:
+                                    return Column(
+                                      children: [
+                                        const Icon(
+                                          Icons.sentiment_very_dissatisfied,
+                                          color: Colors.red,
+                                          size: 30,
+                                        ),
+                                        Text(
+                                          "Poor",
+                                          style: theme.textTheme.bodyLarge!
+                                              .copyWith(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  case 1:
+                                    return Column(
+                                      children: [
+                                        const Icon(
+                                          Icons.sentiment_dissatisfied,
+                                          color: Colors.orange,
+                                          size: 30,
+                                        ),
+                                        Text(
+                                          "Fair",
+                                          style: theme.textTheme.bodyLarge!
+                                              .copyWith(
+                                            color: Colors.orange,
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  case 2:
+                                    return Column(
+                                      children: [
+                                        Icon(
+                                          Icons.sentiment_neutral,
+                                          color: Colors.amber[600],
+                                          size: 30,
+                                        ),
+                                        Text(
+                                          "Average",
+                                          style: theme.textTheme.bodyLarge!
+                                              .copyWith(
+                                            color: Colors.amber[600],
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  case 3:
+                                    return Column(
+                                      children: [
+                                        const Icon(
+                                          Icons.sentiment_satisfied,
+                                          color: Colors.green,
+                                          size: 30,
+                                        ),
+                                        Text(
+                                          "Good",
+                                          style: theme.textTheme.bodyLarge!
+                                              .copyWith(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  case 4:
+                                    return Column(
+                                      children: [
+                                        const Icon(
+                                          Icons.sentiment_very_satisfied,
+                                          color: Colors.blue,
+                                          size: 30,
+                                        ),
+                                        Text(
+                                          "Excellent",
+                                          style: theme.textTheme.bodyLarge!
+                                              .copyWith(
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  default:
+                                    return const Icon(
+                                      Icons.sentiment_very_satisfied,
+                                      color: Colors.green,
+                                    );
+                                }
+                              },
+                              onRatingUpdate: (rating) {
+                                print(rating);
+                              },
+                            ),
+                          );
                         }
                       }),
                     );

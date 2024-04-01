@@ -1,52 +1,57 @@
+import 'package:taxi_driver_app/core/controllers/controllers.dart';
+
 import '../models/user/user_model.dart';
 import '../models/user/user_type_model.dart';
 
+// List<UserModel>? listUser = authController.getAllUsers().then((value) => value);
+
 // set users
+
 List<UserModel> users = [
   UserModel(
-    userId: 'user000001',
-    fullName: 'Abriko',
+    user_id: 'user000001',
+    full_name: 'Abriko',
     email: 'abriko@gmail.com',
-    phoneNumber: '8618354919286',
-    userType: UserType.customer,
+    phone_number: '8618354919286',
+    user_type: UserType.customer,
   ),
   UserModel(
-    userId: 'Admin',
-    fullName: 'Admin',
+    user_id: 'Admin',
+    full_name: 'Admin',
     email: 'admin@gmail.com',
-    phoneNumber: '123456',
-    userType: UserType.admin,
+    phone_number: '123456',
+    user_type: UserType.admin,
   ),
   UserModel(
-    userId: "101",
-    fullName: "Driver 1",
+    user_id: "101",
+    full_name: "Driver 1",
     email: "driver1@example.com",
-    phoneNumber: "1112223333",
+    phone_number: "1112223333",
     // password: "1112223333",
-    userType: UserType.driver,
+    user_type: UserType.driver,
   ),
   UserModel(
-    userId: "102",
-    fullName: "Driver 2",
+    user_id: "102",
+    full_name: "Driver 2",
     email: "driver2@example.com",
-    phoneNumber: "4445556666",
+    phone_number: "4445556666",
     // password: "4445556666",
-    userType: UserType.driver,
+    user_type: UserType.driver,
   ),
   UserModel(
-    userId: "103",
-    fullName: "Driver 3",
+    user_id: "103",
+    full_name: "Driver 3",
     email: "driver3@example.com",
-    phoneNumber: "7778889999",
+    phone_number: "7778889999",
     // password: "7778889999",
-    userType: UserType.driver,
+    user_type: UserType.driver,
   ),
   UserModel(
-    userId: "104",
-    fullName: "Driver 4",
+    user_id: "104",
+    full_name: "Driver 4",
     email: "driver4@example.com",
-    phoneNumber: "1239876543",
+    phone_number: "1239876543",
     // password: "1239876543",
-    userType: UserType.driver,
+    user_type: UserType.driver,
   ),
 ];

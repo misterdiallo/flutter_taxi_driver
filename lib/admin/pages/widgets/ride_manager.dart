@@ -15,7 +15,7 @@ class RideManager {
       builder: (context) {
         return AlertDialog(
           title: Text(
-            "Ride ID: ${ride.rideId}",
+            "Ride ID: ${ride.ride_id}",
             textAlign: TextAlign.center,
           ),
           content: SingleChildScrollView(
@@ -24,12 +24,12 @@ class RideManager {
                 ListTile(
                   leading: const Icon(Icons.person),
                   title: const Text("User"),
-                  subtitle: Text(ride.user.fullName),
+                  subtitle: Text(ride.user.full_name),
                 ),
                 ListTile(
                   leading: const Icon(Icons.directions_car),
                   title: const Text("Driver"),
-                  subtitle: Text(ride.driver.fullName),
+                  subtitle: Text(ride.driver.full_name),
                 ),
                 ListTile(
                   leading: const Icon(Icons.monetization_on),
@@ -39,13 +39,13 @@ class RideManager {
                 ListTile(
                   leading: const Icon(Icons.timer),
                   title: const Text("Start Time"),
-                  subtitle: Text(formatDateUtilsNew(ride.startTime)),
+                  subtitle: Text(formatDateUtilsNew(ride.start_time)),
                 ),
                 ListTile(
                   leading: const Icon(Icons.timer_off),
                   title: const Text("End Time"),
-                  subtitle: Text(ride.endTime != null
-                      ? formatDateUtilsNew(ride.endTime!)
+                  subtitle: Text(ride.end_time != null
+                      ? formatDateUtilsNew(ride.end_time!)
                       : 'N/A'),
                 ),
                 if (ride.car != null)
@@ -53,36 +53,36 @@ class RideManager {
                     leading: const Icon(Icons.directions_car_filled),
                     title: const Text("Car"),
                     subtitle: Text(
-                        "${ride.car!.model} (${ride.car!.licenseNumber})"), // Assuming CarModel has make and model
+                        "${ride.car!.model} (${ride.car!.license_number})"), // Assuming CarModel has make and model
                   ),
-                if (ride.userRating != null)
+                if (ride.user_rating != null)
                   ListTile(
                     leading: const Icon(Icons.star),
                     title: const Text("User Rating"),
                     subtitle: Text(
-                        "${ride.userRating!.rating}/5"), // Assuming RatingModel has a rating field
+                        "${ride.user_rating!.rating}/5"), // Assuming RatingModel has a rating field
                   ),
-                if (ride.driverRating != null)
+                if (ride.driver_rating != null)
                   ListTile(
                     leading: const Icon(Icons.star_outline),
                     title: const Text("Driver Rating"),
-                    subtitle: Text("${ride.driverRating!.rating}/5"),
+                    subtitle: Text("${ride.driver_rating!.rating}/5"),
                   ),
                 ListTile(
                   leading: const Icon(Icons.location_on),
                   title: const Text("Origin"),
-                  subtitle: Text(ride.rideOriginPlace
+                  subtitle: Text(ride.ride_origin_place
                       .name), // Assuming PlaceModel has a name field
                 ),
                 ListTile(
                   leading: const Icon(Icons.location_off),
                   title: const Text("Destination"),
-                  subtitle: Text(ride.rideEndPlace.name),
+                  subtitle: Text(ride.ride_end_place.name),
                 ),
                 ListTile(
                   leading: const Icon(Icons.event_available),
                   title: const Text("Status"),
-                  subtitle: Text(ride.rideStatus.name
+                  subtitle: Text(ride.ride_status.name
                       .toUpperCase()), // Assuming rideStatus is an enum
                 ),
               ],

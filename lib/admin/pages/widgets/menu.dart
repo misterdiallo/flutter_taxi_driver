@@ -38,6 +38,10 @@ class _MenuState extends State<Menu> {
         route: AdminRoutes.AdminRideRoute),
     MenuModel(
         icon: 'assets/svg/setting.svg',
+        title: "Places",
+        route: AdminRoutes.AdminPlaces),
+    MenuModel(
+        icon: 'assets/svg/setting.svg',
         title: "Settings",
         route: AdminRoutes.AdminSettingRoute),
     MenuModel(icon: 'assets/svg/signout.svg', title: "Signout", route: ""),
@@ -83,7 +87,7 @@ class _MenuState extends State<Menu> {
                       selected = i;
                     });
                     if (i == menu.length - 1) {
-                      authController.logOut();
+                      authController.logoutUser();
                       Get.offAllNamed(InitialRoute);
                     } else {
                       Get.find<AdminNavController>().changePage(menu[i].route);

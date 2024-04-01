@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:taxi_driver_app/core/controllers/auth/login_controller.dart';
+import 'package:taxi_driver_app/core/controllers/controllers.dart';
+import 'package:taxi_driver_app/core/custom_popup.dart';
 import 'package:taxi_driver_app/router.dart';
 
 import '../../styles/colors.dart';
 import '../../widgets/custom_text_form_field.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   const Register({
     super.key,
   });
+
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  final LoginController signInController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +87,21 @@ class Register extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.primaryColor,
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(OtpVerificationRoute);
-                  },
-                  child: const Text(
-                    "SIGN UP",
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
-                  ),
+                  onPressed: () => signInController.isLoading.value
+                      ? {}
+                      : signInController.register(),
+                  child: Obx(() {
+                    if (signInController.isLoading.value) {
+                      return CircularProgressIndicator(
+                        color: theme.scaffoldBackgroundColor,
+                      );
+                    } else {
+                      return const Text(
+                        "Sign Up",
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      );
+                    }
+                  }),
                 ),
               )
             ],
@@ -93,61 +112,49 @@ class Register extends StatelessWidget {
   }
 
   Widget _signupForm() {
-    return const Column(
+    return Column(
       children: <Widget>[
         Row(
           children: <Widget>[
             Expanded(
               child: CustomTextFormField(
-                hintText: "First name",
+                hintText: "Full Name",
+                controller: signInController.fullNameController,
               ),
             ),
-            SizedBox(width: 15.0),
+            const SizedBox(width: 15.0),
             Expanded(
               child: CustomTextFormField(
-                hintText: "Last name",
+                hintText: "Email",
+                controller: signInController.emailController,
               ),
             )
           ],
         ),
-        SizedBox(
-          height: 20.0,
-        ),
-        CustomTextFormField(
-          hintText: "Email",
-        ),
-        SizedBox(
+        const SizedBox(
           height: 20.0,
         ),
         Row(
           children: <Widget>[
-            SizedBox(
-              width: 80.0,
+            Expanded(
               child: CustomTextFormField(
-                hintText: "Country",
+                hintText: "Password",
+                controller: signInController.passwordController,
               ),
             ),
-            SizedBox(width: 15.0),
+            const SizedBox(width: 15.0),
             Expanded(
               child: CustomTextFormField(
                 hintText: "Phone number",
+                keyboardType: TextInputType.phone,
+                controller: signInController.phoneController,
               ),
             )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 20.0,
         ),
-        CustomTextFormField(
-          hintText: "Password",
-        ),
-        SizedBox(
-          height: 25.0,
-        ),
-        Text(
-          "By clicking \"Sign Up\" you agree to our terms and conditions as well as our privacy policy",
-          style: TextStyle(fontWeight: FontWeight.bold, color: dbasicDarkColor),
-        )
       ],
     );
   }

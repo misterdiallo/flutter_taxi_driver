@@ -7,7 +7,8 @@ import '../../widgets/location_card.dart';
 
 class Favorites extends StatelessWidget {
   final List<PlaceModel> _places = listPlaces
-      .where((place) => place.typePlace == "Home" || place.typePlace == "Work")
+      .where(
+          (place) => place.type_place == "Home" || place.type_place == "Work")
       .toList();
 
   Favorites({super.key});

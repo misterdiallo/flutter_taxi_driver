@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:taxi_driver_app/core/db/const.dart';
 
 class FirstRunCheckController extends GetxController {
   static const _firstRunSettingsKey = 'is_first_run';
@@ -27,6 +28,7 @@ class FirstRunCheckController extends GetxController {
       box.write(_firstRunSettingsKey, false);
       box.write(_firstRunSettingDateTime, DateTime.now().toString());
       _isFirstRun = isFirstRun;
+
       return isFirstRun;
     }
   }

@@ -33,7 +33,7 @@ class ProfileTab extends StatelessWidget {
                 // User card
                 SmallUserProfileCard(
                   cardColor: theme.primaryColor,
-                  userName: authController.getUserModel()!.fullName,
+                  userName: authController.getUserModel()!.full_name,
                   userProfilePic: const AssetImage("assets/images/car.png"),
                   theme: theme,
                   userTraillingButton: Container(

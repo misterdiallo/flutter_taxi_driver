@@ -157,42 +157,42 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
           builder: (BuildContext context) => RideDetailsCustomer(
                 ride: RideModel(
-                  rideId: const Uuid().v4(),
+                  ride_id: const Uuid().v4(),
                   user: authController.getUserModel()!,
                   car: carList[0],
                   driver: carList[0].user,
                   fare: "55 RMB",
-                  endTime: DateTime(
+                  end_time: DateTime(
                       DateTime.now().year,
                       DateTime.now().month,
                       DateTime.now().day,
                       DateTime.now().hour,
                       DateTime.now().minute + 55),
-                  startTime: DateTime(
+                  start_time: DateTime(
                       DateTime.now().year,
                       DateTime.now().month,
                       DateTime.now().day,
                       DateTime.now().hour,
                       DateTime.now().minute + 5),
-                  rideOriginPlace: PlaceModel(
-                    placeId: "21",
+                  ride_origin_place: PlaceModel(
+                    place_id: "21",
                     name: "Linyi University",
                     address: "789 University Avenue, Linyi, Shandong",
                     latitude: 35.0526,
                     longitude: 118.3421,
                     description: "A renowned educational institution in Linyi.",
-                    typePlace: "University",
-                    phoneNumber: null,
+                    type_place: "University",
+                    phone_number: null,
                     website: "https://www.lyu.edu.cn",
                   ),
-                  rideEndPlace: PlaceModel(
-                    placeId: "20",
+                  ride_end_place: PlaceModel(
+                    place_id: "20",
                     name: "Rizhao Seaside Park",
                     address: "333 Coastal Promenade, Rizhao, Shandong",
                     latitude: 35.4164,
                     longitude: 119.5152,
                   ),
-                  rideStatus: RideStatus.pending,
+                  ride_status: RideStatus.pending,
                   createdAt: DateTime.now(),
                 ),
               ));
@@ -253,38 +253,38 @@ final getRoutes = [
     name: WaitingRideRoute,
     page: () => RideDetailsCustomer(
       ride: RideModel(
-        rideId: const Uuid().v4(),
+        ride_id: const Uuid().v4(),
         user: authController.getUserModel()!,
         car: carList[0],
         driver: carList[0].user,
         fare: "55 RMB",
-        startTime: DateTime(DateTime.now().year, DateTime.now().month,
+        start_time: DateTime(DateTime.now().year, DateTime.now().month,
             DateTime.now().day, DateTime.now().hour, DateTime.now().minute + 5),
-        endTime: DateTime(
+        end_time: DateTime(
             DateTime.now().year,
             DateTime.now().month,
             DateTime.now().day,
             DateTime.now().hour,
             DateTime.now().minute + 55),
-        rideOriginPlace: PlaceModel(
-          placeId: "21",
+        ride_origin_place: PlaceModel(
+          place_id: "21",
           name: "Linyi University",
           address: "789 University Avenue, Linyi, Shandong",
           latitude: 35.0526,
           longitude: 118.3421,
           description: "A renowned educational institution in Linyi.",
-          typePlace: "University",
-          phoneNumber: null,
+          type_place: "University",
+          phone_number: null,
           website: "https://www.lyu.edu.cn",
         ),
-        rideEndPlace: PlaceModel(
-          placeId: "20",
+        ride_end_place: PlaceModel(
+          place_id: "20",
           name: "Rizhao Seaside Park",
           address: "333 Coastal Promenade, Rizhao, Shandong",
           latitude: 35.4164,
           longitude: 119.5152,
         ),
-        rideStatus: RideStatus.pending,
+        ride_status: RideStatus.pending,
         createdAt: DateTime.now(),
       ),
     ),
