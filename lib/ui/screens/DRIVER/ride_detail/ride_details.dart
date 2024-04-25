@@ -4,12 +4,15 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:slide_to_act/slide_to_act.dart';
+import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import 'package:taxi_driver_app/core/models/ride_model.dart';
 import 'package:taxi_driver_app/ui/styles/colors.dart';
 
 class DriverRideDetailsPage extends StatefulWidget {
   final RideModel ride;
-  const DriverRideDetailsPage({required this.ride, super.key});
+  final int id;
+  const DriverRideDetailsPage(
+      {required this.ride, required this.id, super.key});
 
   @override
   State<DriverRideDetailsPage> createState() => _DriverRideDetailsPageState();
@@ -18,26 +21,20 @@ class DriverRideDetailsPage extends StatefulWidget {
 class _DriverRideDetailsPageState extends State<DriverRideDetailsPage> {
   RideModel? currentRide;
 
-  void updatedRideStatus() {
-    if (currentRide!.ride_status == RideStatus.pending) {
-      print("before Update: ${currentRide!.ride_status.name.toString()}");
-      setState(() {
-        currentRide = currentRide!.updateRideStatus(RideStatus.accepted);
-      });
-      print("after Update: ${currentRide!.ride_status.name.toString()}");
-    } else if (currentRide!.ride_status == RideStatus.accepted) {
-      print("before Update: ${currentRide!.ride_status.name.toString()}");
-      setState(() {
-        currentRide = currentRide!.updateRideStatus(RideStatus.ongoing);
-      });
-      print("after Update: ${currentRide!.ride_status.name.toString()}");
-    } else if (currentRide!.ride_status == RideStatus.ongoing) {
-      print("before Update: ${currentRide!.ride_status.name.toString()}");
-      setState(() {
-        currentRide = currentRide!.updateRideStatus(RideStatus.completed);
-      });
-      print("after Update: ${currentRide!.ride_status.name.toString()}");
-    }
+  Future updatedRideStatus(RideStatus status) async {
+    await driverData
+        .updatedRideStatus(currentRide!.ride_id, status)
+        .then((value) async {
+      if (value) {
+        await driverData.getOneRide(currentRide!.ride_id).then((value) {
+          if (value != null) {
+            setState(() {
+              currentRide = value;
+            });
+          }
+        });
+      }
+    });
   }
 
   @override
@@ -64,9 +61,16 @@ class _DriverRideDetailsPageState extends State<DriverRideDetailsPage> {
           return Content(
             theme: theme,
             ride: currentRide!,
-            onSubmit: () {
-              updatedRideStatus();
-              return null;
+            onSubmit: () async {
+              await updatedRideStatus(
+                currentRide!.ride_status == RideStatus.pending
+                    ? RideStatus.accepted
+                    : currentRide!.ride_status == RideStatus.accepted
+                        ? RideStatus.ongoing
+                        : currentRide!.ride_status == RideStatus.ongoing
+                            ? RideStatus.completed
+                            : RideStatus.pending,
+              );
             },
           );
         }),
@@ -98,7 +102,7 @@ class Content extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      'Request Details (${ride.ride_status.name.toUpperCase()})',
+                      'Customer is Waiting',
                       style: theme.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.w300,
                         fontSize: 25,
@@ -220,7 +224,7 @@ class Content extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  "You'll get",
+                                  "To Earn",
                                   style: theme.textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.w300,
                                     // fontSize: 25,
@@ -285,7 +289,7 @@ class Content extends StatelessWidget {
                   children: [
                     Center(
                       child: Text(
-                        'Request Details  (${ride.ride_status.name.toUpperCase()})',
+                        "You've ${ride.ride_status.name.toUpperCase()} the ride",
                         style: theme.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w300,
                           fontSize: 25,

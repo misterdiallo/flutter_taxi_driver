@@ -21,6 +21,7 @@ import 'package:taxi_driver_app/core/services/first_run/first_run_check_service.
 
 import 'core/controllers/app/app_controller.dart';
 import 'core/controllers/auth/login_controller.dart';
+import 'core/controllers/connectivity_controller.dart';
 import 'core/controllers/controllers.dart';
 import 'core/controllers/notification/notification_controller.dart';
 import 'core/controllers/users/user_provider.dart';
@@ -48,6 +49,7 @@ instanceControllers() async {
   Get.put(PlacesController());
   Get.put(SupabaseController());
   await Get.putAsync(() => FirstRunCheckService().init());
+  Get.put(ConnectivityController());
 }
 
 void main() async {

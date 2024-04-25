@@ -10,9 +10,11 @@ import 'package:taxi_driver_app/ui/widgets/get_color_function.dart';
 
 class RideDetailsCustomer extends StatefulWidget {
   final RideModel? ride;
+  final bool isPageOnly;
 
   const RideDetailsCustomer({
     Key? key,
+    this.isPageOnly = false,
     this.ride,
   }) : super(key: key);
 
@@ -22,20 +24,24 @@ class RideDetailsCustomer extends StatefulWidget {
 
 class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // updateStatusAfterTime();
-  }
-
-  @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     RideModel ride = widget.ride!;
 
     return Scaffold(
+      appBar: widget.isPageOnly
+          ? AppBar(
+              centerTitle: true,
+              title: Text(
+                (ride.ride_status.name == RideStatus.pending.name)
+                    ? "Searching "
+                    : ride.ride_status.name.toUpperCase(),
+                style: theme.textTheme.titleLarge,
+              ),
+            )
+          : null,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12.0),
         child: SizedBox.expand(
           child: Stack(
             children: [
@@ -45,8 +51,8 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                   Center(
                     child: Text(
                       (ride.ride_status.name == RideStatus.pending.name)
-                          ? 'Driver on the way...'
-                          : "Ride is ${ride.ride_status.name.toUpperCase()}...",
+                          ? 'Finding the nearest driver...'
+                          : "Ride is ${ride.ride_status.name.toUpperCase()}",
                       style: theme.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.w300,
                         fontSize: 20,
@@ -57,155 +63,188 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                     height: 16,
                   ),
                   Center(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  child: Icon(
-                                    FontAwesomeIcons.taxi,
-                                    color: theme.primaryColor,
-                                    size: 30,
-                                  ),
-                                ),
-                                Text(
-                                  ride.car!.user.full_name,
-                                  style: theme.textTheme.bodyLarge!.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                RatingBarIndicator(
-                                  rating: 3.6,
-                                  itemBuilder: (context, index) => Icon(
-                                    Icons.star,
-                                    color: theme.primaryColor,
-                                  ),
-                                  itemCount: 5,
-                                  itemSize: 10.0,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            constraints: const BoxConstraints(maxWidth: 500),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    RichText(
-                                      text: TextSpan(
-                                        text: ride.car!.plate_number,
-                                        style: theme.textTheme.bodyLarge!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 19,
-                                                color: theme.primaryColor),
-                                      ),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        RichText(
-                                          text: TextSpan(
-                                            text: ride.car!.model.toUpperCase(),
-                                            style: theme.textTheme.bodyLarge!
-                                                .copyWith(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 15,
+                    child: ride.ride_status.name == RideStatus.pending.name
+                        ? CircularProgressIndicator(
+                            color: theme.primaryColor,
+                          )
+                        : ride.ride_status.name == RideStatus.canceled.name
+                            ? const SizedBox.shrink()
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircleAvatar(
+                                            backgroundColor: Colors.transparent,
+                                            child: Icon(
+                                              FontAwesomeIcons.taxi,
+                                              color: theme.primaryColor,
+                                              size: 30,
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        SizedBox(
-                                          width: 50,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Icon(
-                                                Icons.circle,
-                                                color: getColorFromName(
-                                                    ride.car!.color),
-                                                size: 15,
-                                              ),
-                                              Text(
-                                                ride.car!.color,
-                                                style: theme
-                                                    .textTheme.bodyLarge!
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Status: ",
-                                      style:
-                                          theme.textTheme.bodyLarge!.copyWith(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Card(
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(5),
-                                        child: RichText(
-                                          textAlign: TextAlign.center,
-                                          text: TextSpan(
-                                            text: ride.ride_status.name
-                                                .toUpperCase(),
+                                          Text(
+                                            ride.car!.user.full_name,
                                             style: theme.textTheme.bodyLarge!
                                                 .copyWith(
                                               fontWeight: FontWeight.w600,
-                                              fontSize: 15,
-                                              color: theme.primaryColor,
+                                              fontSize: 14,
                                             ),
                                           ),
-                                        ),
+                                          RatingBarIndicator(
+                                            rating: 3.6,
+                                            itemBuilder: (context, index) =>
+                                                Icon(
+                                              Icons.star,
+                                              color: theme.primaryColor,
+                                            ),
+                                            itemCount: 5,
+                                            itemSize: 10.0,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      constraints: const BoxConstraints(
+                                          maxWidth: 500, minWidth: 100),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              RichText(
+                                                text: TextSpan(
+                                                  text: ride.car!.plate_number,
+                                                  style: theme
+                                                      .textTheme.bodyLarge!
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 19,
+                                                          color: theme
+                                                              .primaryColor),
+                                                ),
+                                              ),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: ride.car!.model
+                                                          .toUpperCase(),
+                                                      style: theme
+                                                          .textTheme.bodyLarge!
+                                                          .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  SizedBox(
+                                                    // width: 50,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.circle,
+                                                          color:
+                                                              getColorFromName(
+                                                                  ride.car!
+                                                                      .color),
+                                                          size: 15,
+                                                        ),
+                                                        Text(
+                                                          ride.car!.color
+                                                              .toUpperCase(),
+                                                          style: theme.textTheme
+                                                              .bodyLarge!
+                                                              .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Status: ",
+                                                style: theme
+                                                    .textTheme.bodyLarge!
+                                                    .copyWith(
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .scaffoldBackgroundColor,
+                                                  border: Border.all(
+                                                      color: Theme.of(context)
+                                                          .primaryColor),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(5),
+                                                  child: RichText(
+                                                    textAlign: TextAlign.center,
+                                                    text: TextSpan(
+                                                      text: ride
+                                                          .ride_status.name
+                                                          .toUpperCase(),
+                                                      style: theme
+                                                          .textTheme.bodyLarge!
+                                                          .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 15,
+                                                        color:
+                                                            theme.primaryColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                   ),
                   const SizedBox(height: 16),
                   Center(
@@ -289,8 +328,9 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                             RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
-                                text:
-                                    "${'${ride.end_time!.month}'}. ${ride.end_time!.day}th\n",
+                                text: ride.end_time != null
+                                    ? "${'${ride.end_time!.month}'}. ${ride.end_time!.day}th\n"
+                                    : "--none--",
                                 style: theme.textTheme.bodyLarge!.copyWith(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 10,
@@ -298,8 +338,9 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
                                 ),
                                 children: [
                                   TextSpan(
-                                    text:
-                                        "${ride.end_time!.hour > 9 ? ride.end_time!.hour : '0${ride.end_time!.hour}'}:${ride.end_time!.minute > 9 ? ride.end_time!.minute : '0${ride.end_time!.minute}'}",
+                                    text: ride.end_time != null
+                                        ? "${ride.end_time!.hour > 9 ? ride.end_time!.hour : '0${ride.end_time!.hour}'}:${ride.end_time!.minute > 9 ? ride.end_time!.minute : '0${ride.end_time!.minute}'}"
+                                        : "",
                                     style: theme.textTheme.bodyLarge!.copyWith(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
@@ -405,6 +446,8 @@ class _RideDetailsCustomerState extends State<RideDetailsCustomer> {
 
                         if ((ride.ride_status.name !=
                                 RideStatus.ongoing.name) &&
+                            (ride.ride_status.name !=
+                                RideStatus.canceled.name) &&
                             (ride.ride_status.name !=
                                 RideStatus.completed.name)) {
                           return slideAction;

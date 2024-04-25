@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:taxi_driver_app/core/controllers/app/app_constant.dart';
 import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import 'package:taxi_driver_app/core/services/user_service.dart';
+import 'package:taxi_driver_app/ui/screens/DRIVER/driver_balance.dart';
+import 'package:taxi_driver_app/ui/screens/DRIVER/ride_history.dart';
 import 'package:taxi_driver_app/ui/widgets/icon_style.dart';
 import 'package:taxi_driver_app/ui/widgets/settings_group_widget.dart';
 import 'package:taxi_driver_app/ui/widgets/settings_item.widget.dart';
@@ -77,7 +79,9 @@ class ProfileTab extends StatelessWidget {
                 SettingsGroup(
                   items: [
                     SettingsItem(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const DriverRideHistory());
+                      },
                       icons: Icons.history_toggle_off_outlined,
                       iconStyle: IconStyle(
                         iconsColor: theme.cardColor,
@@ -88,18 +92,9 @@ class ProfileTab extends StatelessWidget {
                       subtitle: "Check your rides history",
                     ),
                     SettingsItem(
-                      onTap: () {},
-                      icons: FontAwesomeIcons.star,
-                      iconStyle: IconStyle(
-                        iconsColor: theme.cardColor,
-                        withBackground: true,
-                        backgroundColor: theme.primaryColor,
-                      ),
-                      title: 'Reviews',
-                      subtitle: "Check what customers think",
-                    ),
-                    SettingsItem(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const DriverBalance());
+                      },
                       icons: FontAwesomeIcons.moneyBillTransfer,
                       iconStyle: IconStyle(
                         iconsColor: theme.cardColor,
@@ -109,32 +104,43 @@ class ProfileTab extends StatelessWidget {
                       title: 'Balance',
                       subtitle: "Check how much you made",
                     ),
+                    // SettingsItem(
+                    //   onTap: () {},
+                    //   icons: FontAwesomeIcons.star,
+                    //   iconStyle: IconStyle(
+                    //     iconsColor: theme.cardColor,
+                    //     withBackground: true,
+                    //     backgroundColor: theme.primaryColor,
+                    //   ),
+                    //   title: 'Reviews',
+                    //   subtitle: "Check what customers think",
+                    // ),
                   ],
                 ),
                 SettingsGroup(
                   items: [
-                    SettingsItem(
-                      onTap: () {},
-                      icons: Icons.dark_mode_rounded,
-                      iconStyle: IconStyle(
-                        iconsColor: theme.cardColor,
-                        withBackground: true,
-                        backgroundColor: theme.primaryColor,
-                      ),
-                      title: 'Dark mode',
-                      subtitle: "Automatic",
-                      trailing: StatefulBuilder(
-                        builder: (context, setState) {
-                          return Switch.adaptive(
-                            value: appController.isDarkMode,
-                            onChanged: (value) {
-                              appController.changeTheme(value);
-                            },
-                            activeColor: theme.primaryColor,
-                          );
-                        },
-                      ),
-                    ),
+                    // SettingsItem(
+                    //   onTap: () {},
+                    //   icons: Icons.dark_mode_rounded,
+                    //   iconStyle: IconStyle(
+                    //     iconsColor: theme.cardColor,
+                    //     withBackground: true,
+                    //     backgroundColor: theme.primaryColor,
+                    //   ),
+                    //   title: 'Dark mode',
+                    //   subtitle: "Automatic",
+                    //   trailing: StatefulBuilder(
+                    //     builder: (context, setState) {
+                    //       return Switch.adaptive(
+                    //         value: appController.isDarkMode,
+                    //         onChanged: (value) {
+                    //           appController.changeTheme(value);
+                    //         },
+                    //         activeColor: theme.primaryColor,
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                     SettingsItem(
                       onTap: () {},
                       icons: Icons.info_rounded,
@@ -151,19 +157,21 @@ class ProfileTab extends StatelessWidget {
                   settingsGroupTitle: "Account",
                   items: [
                     SettingsItem(
-                      onTap: () {},
+                      onTap: () async {
+                        authController.logoutUser();
+                      },
                       icons: Icons.exit_to_app_rounded,
                       title: "Sign Out",
                     ),
-                    SettingsItem(
-                      onTap: () {},
-                      icons: CupertinoIcons.delete_solid,
-                      title: "Delete account",
-                      titleStyle: const TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    // SettingsItem(
+                    //   onTap: () {},
+                    //   icons: CupertinoIcons.delete_solid,
+                    //   title: "Delete account",
+                    //   titleStyle: const TextStyle(
+                    //     color: Colors.red,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
                   ],
                 ),
                 const SizedBox(

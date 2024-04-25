@@ -14,6 +14,12 @@ class _HomePageDriverState extends State<HomePageDriver> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    driverData.listAvailableRides();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
@@ -31,61 +37,61 @@ class _HomePageDriverState extends State<HomePageDriver> {
               }),
             ),
           ),
-          Positioned(
-            top: 10,
-            right: 10,
-            child: GestureDetector(
-              onTap: () {
-                notificationDrawerController.toggleDrawer(_scaffoldKey);
-              },
-              child: Container(
-                margin: const EdgeInsets.only(right: 6),
-                width: 30,
-                height: 30,
-                child: Stack(
-                  children: [
-                    Icon(
-                      Icons.notifications,
-                      color: theme.primaryColor,
-                      size: 30,
-                    ),
-                    notificationController.getUnreadNotifications().isNotEmpty
-                        ? Container(
-                            width: 30,
-                            height: 30,
-                            alignment: Alignment.topRight,
-                            child: Container(
-                              width: 15,
-                              height: 15,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: theme.scaffoldBackgroundColor,
-                                border: Border.all(
-                                    color: theme.highlightColor, width: 1),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: Center(
-                                  child: Text(
-                                    notificationController
-                                        .getUnreadNotifications()
-                                        .length
-                                        .toString(),
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: theme.primaryColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 10,
+          //   right: 10,
+          //   child: GestureDetector(
+          //     onTap: () {
+          //       notificationDrawerController.toggleDrawer(_scaffoldKey);
+          //     },
+          //     child: Container(
+          //       margin: const EdgeInsets.only(right: 6),
+          //       width: 30,
+          //       height: 30,
+          //       child: Stack(
+          //         children: [
+          //           Icon(
+          //             Icons.notifications,
+          //             color: theme.primaryColor,
+          //             size: 30,
+          //           ),
+          //           notificationController.getUnreadNotifications().isNotEmpty
+          //               ? Container(
+          //                   width: 30,
+          //                   height: 30,
+          //                   alignment: Alignment.topRight,
+          //                   child: Container(
+          //                     width: 15,
+          //                     height: 15,
+          //                     decoration: BoxDecoration(
+          //                       shape: BoxShape.circle,
+          //                       color: theme.scaffoldBackgroundColor,
+          //                       border: Border.all(
+          //                           color: theme.highlightColor, width: 1),
+          //                     ),
+          //                     child: Padding(
+          //                       padding: const EdgeInsets.all(0.0),
+          //                       child: Center(
+          //                         child: Text(
+          //                           notificationController
+          //                               .getUnreadNotifications()
+          //                               .length
+          //                               .toString(),
+          //                           style: TextStyle(
+          //                             fontSize: 10,
+          //                             color: theme.primaryColor,
+          //                           ),
+          //                         ),
+          //                       ),
+          //                     ),
+          //                   ),
+          //                 )
+          //               : const SizedBox.shrink(),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
       extendBody: true,
@@ -109,7 +115,6 @@ class _HomePageDriverState extends State<HomePageDriver> {
           }).toList(),
 
           onTap: (index) {
-            print('current selected index $index');
             bottomNavigationBarController.pageController.value
                 .jumpToPage(index);
           },

@@ -77,58 +77,64 @@ class Login extends StatelessWidget {
   Widget _loginForm(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        CustomTextFormField(
-          controller: _loginController.emailController,
-          hintText: "Email",
-        ),
-        const SizedBox(height: 20.0),
-        CustomTextFormField(
-          controller: _loginController.passwordController,
-          hintText: "Password",
-        ),
-        // const SizedBox(height: 20.0),
-        // GestureDetector(
-        //   onTap: () {
-        //     // Handle forgot password action
-        //   },
-        //   child: Text(
-        //     "Forgot password?",
-        //     style: TextStyle(
-        //       color: theme.primaryColor,
-        //       fontSize: 16.0,
-        //       fontWeight: FontWeight.bold,
-        //     ),
-        //   ),
-        // ),
-        const SizedBox(height: 25.0),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 45.0,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: theme.primaryColor,
-            ),
-            onPressed: () =>
-                loginController.isLoading.value ? {} : loginController.login(),
-            child: Obx(() {
-              if (loginController.isLoading.value) {
-                return CircularProgressIndicator(
-                  color: theme.scaffoldBackgroundColor,
-                );
-              } else {
-                return const Text(
-                  "LOGIN",
-                  style: TextStyle(color: Colors.white, fontSize: 16.0),
-                );
-              }
-            }),
-          ),
-        ),
-      ],
-    );
+    return GetBuilder<LoginController>(
+        init: LoginController(),
+        builder: (controller) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              CustomTextFormField(
+                controller: _loginController.emailController,
+                hintText: "Email",
+              ),
+              const SizedBox(height: 20.0),
+              CustomTextFormField(
+                controller: _loginController.passwordController,
+                hintText: "Password",
+              ),
+              // const SizedBox(height: 20.0),
+              // GestureDetector(
+              //   onTap: () {
+              //     // Handle forgot password action
+              //   },
+              //   child: Text(
+              //     "Forgot password?",
+              //     style: TextStyle(
+              //       color: theme.primaryColor,
+              //       fontSize: 16.0,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              // ),
+              const SizedBox(height: 25.0),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 45.0,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.primaryColor,
+                  ),
+                  onPressed: () {
+                    controller.hideKeyboard(context);
+                    controller.isLoading.value ? {} : controller.login();
+                  },
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return CircularProgressIndicator(
+                        color: theme.scaffoldBackgroundColor,
+                      );
+                    } else {
+                      return const Text(
+                        "LOGIN",
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      );
+                    }
+                  }),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   Widget _socialLoginButtons(ThemeData theme) {

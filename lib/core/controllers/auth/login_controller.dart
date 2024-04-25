@@ -13,6 +13,11 @@ class LoginController extends GetxController {
   TextEditingController fullNameController = TextEditingController();
   final RxBool isLoading = false.obs;
   final SupabaseClient _supabaseClient = Supabase.instance.client;
+  // Define a FocusNode
+  // Function to hide keyboard
+  void hideKeyboard(BuildContext context) {
+    FocusScope.of(context).unfocus();
+  }
 
   Future<void> logout() async {
     await Supabase.instance.client.auth.signOut();
@@ -90,6 +95,7 @@ class LoginController extends GetxController {
         backgroundColor: Colors.red[900],
         colorText: Colors.white,
       );
+      print(e);
     }
   }
 

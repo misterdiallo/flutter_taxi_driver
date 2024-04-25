@@ -39,6 +39,7 @@ dependencies:
   supabase_flutter: ^2.3.4
   dob_input_field: ^2.0.0
   permission_handler: ^11.3.1
+  connectivity_plus: ^6.0.3
 
 dev_dependencies:
   flutter_test:

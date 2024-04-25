@@ -51,7 +51,7 @@ class _SuggestedRidesState extends State<SuggestedRides> {
         ),
         argument: "Best choice",
         selected: true,
-        farePrice: "${fareModel!.taxi.toStringAsFixed(2)} RMB",
+        farePrice: fareModel!.taxi.toStringAsFixed(2),
         duration: ConversionUtil.secondsToHoursOrMinutes(routeApiInfo.distance),
       ),
     );
@@ -63,7 +63,7 @@ class _SuggestedRidesState extends State<SuggestedRides> {
           size: 30,
         ),
         selected: false,
-        farePrice: "${fareModel!.luxe.toStringAsFixed(2)} RMB",
+        farePrice: fareModel!.luxe.toStringAsFixed(2),
         duration: ConversionUtil.secondsToHoursOrMinutes(routeApiInfo.distance),
       ),
     );

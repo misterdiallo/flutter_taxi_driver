@@ -22,7 +22,8 @@ import 'ride_details.dart';
 
 class RideDetails extends StatefulWidget {
   final RideModel? ride;
-  const RideDetails({Key? key, this.ride}) : super(key: key);
+  final int? id;
+  const RideDetails({Key? key, this.ride, this.id}) : super(key: key);
 
   @override
   State<RideDetails> createState() => _RideDetailsState();
@@ -171,6 +172,7 @@ class _RideDetailsState extends State<RideDetails>
             child: Builder(builder: (context) {
               return DriverRideDetailsPage(
                 ride: widget.ride!,
+                id: widget.id!,
               );
             }),
           ),

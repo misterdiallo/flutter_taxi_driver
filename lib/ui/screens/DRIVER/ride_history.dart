@@ -2,49 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import 'package:taxi_driver_app/core/models/ride_model.dart';
-import 'package:taxi_driver_app/core/services/ride_service.dart';
-import 'package:taxi_driver_app/router.dart';
+import 'package:taxi_driver_app/ui/screens/CUSTOMER/ride_detail_page_customer.dart';
+import 'package:taxi_driver_app/ui/utils/conversion_utils.dart';
+import 'package:taxi_driver_app/ui/utils/date_utlis.dart';
 import 'package:taxi_driver_app/ui/utils/money_formatter.dart';
-
+import '../../widgets/ride_card.dart';
+import '../../widgets/ride_cards.dart';
 import 'ride_detail/ride_main_page.dart';
 
-class RideDriverTab extends StatefulWidget {
-  const RideDriverTab({Key? key}) : super(key: key);
+class DriverRideHistory extends StatefulWidget {
+  const DriverRideHistory({super.key});
 
   @override
-  _RideDriverTabState createState() => _RideDriverTabState();
+  State<DriverRideHistory> createState() => _DriverRideHistoryState();
 }
 
-class _RideDriverTabState extends State<RideDriverTab> {
+class _DriverRideHistoryState extends State<DriverRideHistory> {
   late Stream<List<RideModel>> _pendingRidesStream;
 
   @override
   void initState() {
     super.initState();
-    _pendingRidesStream = driverData.getAllPendingRides().asStream();
+    _pendingRidesStream = driverData.getAllMyRides().asStream();
   }
 
-  Future<void> refreshPendingRides() async {
+  Future<void> refreshAllMyRides() async {
     setState(() {
-      _pendingRidesStream = driverData.getAllPendingRides().asStream();
-    });
-  }
-
-  // Function to accept a ride
-  void acceptRide(RideModel ride, int id) {
-    Get.to(() => RideDetails(
-              ride: ride,
-              id: id,
-            ))!
-        .then((value) async {
-      await refreshPendingRides();
-    });
-  }
-
-  // Function to decline a ride
-  void declineRide(int index) {
-    setState(() {
-      // displayedRides.removeAt(index); // Remove the declined ride
+      _pendingRidesStream = driverData.getAllMyRides().asStream();
     });
   }
 
@@ -56,18 +40,17 @@ class _RideDriverTabState extends State<RideDriverTab> {
     return Scaffold(
       appBar: AppBar(
         title: Obx(() {
-          if (driverData.listAvailableRides.isEmpty) {
-            return const Text("Ride Request");
+          if (driverData.listAllMyRides.isEmpty) {
+            return const Text("Ride History");
           } else {
-            return Text(
-                'Ride Requests (${driverData.listAvailableRides.length})');
+            return Text('Ride History (${driverData.listAllMyRides.length})');
           }
         }),
       ),
       body: RefreshIndicator(
         color: theme.primaryColor,
         backgroundColor: theme.primaryColor.withOpacity(0.4),
-        onRefresh: refreshPendingRides,
+        onRefresh: refreshAllMyRides,
         child: StreamBuilder(
             stream: _pendingRidesStream,
             builder: (context, snapshot) {
@@ -85,7 +68,7 @@ class _RideDriverTabState extends State<RideDriverTab> {
                 final List<RideModel>? pendingRides = snapshot.data;
                 if (pendingRides!.isEmpty) {
                   return const Center(
-                    child: Text('No pending rides'),
+                    child: Text('-- Empty --'),
                   );
                 } else {
                   return ListView.builder(
@@ -97,7 +80,7 @@ class _RideDriverTabState extends State<RideDriverTab> {
                           // Navigate to RideDetails page when Card is clicked
                           Get.to(() => RideDetails(ride: ride, id: index))!
                               .then((value) async {
-                            await refreshPendingRides();
+                            await refreshAllMyRides();
                           });
                         },
                         child: Card(
@@ -215,86 +198,33 @@ class _RideDriverTabState extends State<RideDriverTab> {
                                 ),
                               ),
                               Builder(builder: (context) {
-                                if (ride.ride_status == RideStatus.pending) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 10.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            // Implement logic to accept the ride
-                                            // You can call a function here to accept the ride
-                                            acceptRide(ride, index);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: theme.primaryColor,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 6),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            'Accept',
-                                            style: theme.textTheme.bodyLarge!
-                                                .copyWith(
-                                              // fontSize: 1,
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  theme.scaffoldBackgroundColor,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          MoneyFormatter.formatStringToMoney(
-                                              ride.fare),
-                                          style: theme.textTheme.bodyLarge!
-                                              .copyWith(
-                                            // fontSize: 1,
-                                            fontWeight: FontWeight.bold,
-                                            color: theme.primaryColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                } else {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 10.0),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        // Implement logic to accept the ride
-                                        // You can call a function here to accept the ride
-                                        acceptRide(ride, index);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: theme.primaryColor,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 16, vertical: 20),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      child: Text(
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
                                         ride.ride_status.name.toUpperCase(),
                                         style:
                                             theme.textTheme.bodyLarge!.copyWith(
                                           // fontSize: 1,
-                                          fontWeight: FontWeight.bold,
-                                          color: theme.scaffoldBackgroundColor,
+                                          fontWeight: FontWeight.w400,
+                                          color: theme.primaryColor,
                                         ),
                                       ),
-                                    ),
-                                  );
-                                }
-                              })
+                                      Text(
+                                        MoneyFormatter.formatStringToMoney(
+                                            ride.fare),
+                                        style:
+                                            theme.textTheme.bodyLarge!.copyWith(
+                                          // fontSize: 1,
+                                          fontWeight: FontWeight.bold,
+                                          // color: theme.primaryColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
                             ],
                           ),
                         ),

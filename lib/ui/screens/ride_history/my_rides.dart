@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taxi_driver_app/core/controllers/controllers.dart';
 import 'package:taxi_driver_app/core/models/ride_model.dart';
+import 'package:taxi_driver_app/ui/screens/CUSTOMER/ride_detail_page_customer.dart';
+import 'package:taxi_driver_app/ui/utils/conversion_utils.dart';
 import 'package:taxi_driver_app/ui/utils/date_utlis.dart';
 import '../../widgets/ride_card.dart';
 import '../../widgets/ride_cards.dart';
@@ -39,53 +41,147 @@ class MyRides extends StatelessWidget {
                 itemCount: listOfMyRides.length,
                 itemBuilder: (context, index) {
                   final ride = listOfMyRides[index];
-                  return Card(
-                    elevation: 2,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: ListTile(
-                      title: RichText(
-                        text: TextSpan(
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 16),
+                  return GestureDetector(
+                    onTap: () => Get.to(() => RideDetailsCustomer(
+                          isPageOnly: true,
+                          ride: ride,
+                        )),
+                    child: Card(
+                      elevation: 4,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 10),
+
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
                           children: [
-                            TextSpan(
-                              text: ride.ride_origin_place.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Header Date
+                                Text(
+                                  formatToDateTimeFromApi(
+                                    ride.createdAt.toIso8601String(),
+                                  ),
+                                  style: theme.textTheme.bodyMedium!.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                // Header Status
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 1),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 0.5,
+                                      color: ride.ride_status ==
+                                              RideStatus.canceled
+                                          ? theme.hintColor
+                                          : ride.ride_status ==
+                                                  RideStatus.pending
+                                              ? theme.primaryColor
+                                              : theme.disabledColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    ride.ride_status.name.toUpperCase(),
+                                    style: theme.textTheme.bodyMedium!.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const TextSpan(
-                              text: ' to ',
+                            const SizedBox(
+                              height: 10,
                             ),
-                            TextSpan(
-                              text: ride.ride_end_place.name,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                            // Content source
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.add_location_rounded,
+                                  color: theme.hintColor.withOpacity(0.7),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  ride.ride_origin_place.name,
+                                  style: theme.textTheme.bodyMedium!.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            // Content Destination
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_pin,
+                                  color: theme.primaryColor.withOpacity(0.7),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  ride.ride_end_place.name,
+                                  style: theme.textTheme.bodyMedium!.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(formatToDateTimeFromApi(
-                              ride.start_time.toString())),
-                          Text(ride.fare),
-
-                          Text(ride.car!
-                              .plate_number), // Replace with actual driver name
-                        ],
-                      ),
-                      // trailing: Chip(
-                      //   backgroundColor: theme.primaryColor,
-                      //   label: Text(
-                      //     ride.ride_status.name.toString().toUpperCase(),
-                      //     style: const TextStyle(color: Colors.white),
+                      // ListTile(
+                      //   title: RichText(
+                      //     text: TextSpan(
+                      //       style: const TextStyle(
+                      //           color: Colors.black, fontSize: 16),
+                      //       children: [
+                      //         TextSpan(
+                      //           text: ride.ride_origin_place.name,
+                      //           style: const TextStyle(
+                      //             fontWeight: FontWeight.w400,
+                      //             fontSize: 12,
+                      //           ),
+                      //         ),
+                      //         const TextSpan(
+                      //           text: ' to ',
+                      //         ),
+                      //         TextSpan(
+                      //           text: ride.ride_end_place.name,
+                      //           style:
+                      //               const TextStyle(fontWeight: FontWeight.bold),
+                      //         ),
+                      //       ],
+                      //     ),
                       //   ),
+                      //   subtitle: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Text(formatToDateTimeFromApi(
+                      //           ride.start_time.toString())),
+                      //       Text(ride.fare),
+
+                      //       Text(ride.car!
+                      //           .plate_number), // Replace with actual driver name
+                      //     ],
+                      //   ),
+                      //   // trailing: Chip(
+                      //   //   backgroundColor: theme.primaryColor,
+                      //   //   label: Text(
+                      //   //     ride.ride_status.name.toString().toUpperCase(),
+                      //   //     style: const TextStyle(color: Colors.white),
+                      //   //   ),
+                      //   // ),
+                      //   // Add more details as needed (car, ratings, etc.)
                       // ),
-                      // Add more details as needed (car, ratings, etc.)
                     ),
                   );
                   // return Container(
